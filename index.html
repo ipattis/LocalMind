@@ -250,16 +250,25 @@
     z-index: 1;
   }
 
-  .model-badge.badge-cached {
+  .cached-label {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.52rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--accent-dim);
-    background: rgba(138, 170, 78, 0.1);
-    border: 1px solid rgba(138, 170, 78, 0.25);
+    opacity: 0.7;
+    z-index: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
 
-  .model-badge.badge-active {
-    color: var(--accent);
-    background: rgba(196, 240, 110, 0.12);
-    border: 1px solid rgba(196, 240, 110, 0.3);
+  .cached-label:hover {
+    color: #e08080;
+    opacity: 1;
   }
 
   .tiny-label, .long-load-label, .goldilocks-label {
@@ -299,27 +308,6 @@
     margin-top: 6px;
     position: relative;
     letter-spacing: 0.02em;
-  }
-
-  .unload-btn {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 400;
-    color: #e08080;
-    background: rgba(224, 80, 80, 0.08);
-    border: 1px solid rgba(224, 80, 80, 0.25);
-    border-radius: 100px;
-    padding: 5px 14px;
-    margin-top: 10px;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.2s ease;
-    letter-spacing: 0.03em;
-  }
-
-  .unload-btn:hover {
-    background: rgba(224, 80, 80, 0.15);
-    border-color: rgba(224, 80, 80, 0.4);
   }
 
   .change-model-btn {
@@ -2825,11 +2813,31 @@
     try {
       const cacheNames = await caches.keys();
       const cachedIds = new Set();
+
+      // Quick pass: cache name contains model ID (WebLLM pattern)
       for (const m of MODELS) {
         if (cacheNames.some(name => name.includes(m.id))) {
           cachedIds.add(m.id);
         }
       }
+
+      // Deep pass: check inside cache entries for Transformers.js models
+      const unchecked = MODELS.filter(m => !cachedIds.has(m.id));
+      if (unchecked.length > 0) {
+        for (const cacheName of cacheNames) {
+          try {
+            const cache = await caches.open(cacheName);
+            const keys = await cache.keys();
+            const urls = keys.map(r => r.url);
+            for (const m of unchecked) {
+              if (!cachedIds.has(m.id) && urls.some(u => u.includes(m.id.replace(/\//g, "%2F")) || u.includes(m.id))) {
+                cachedIds.add(m.id);
+              }
+            }
+          } catch { /* skip inaccessible caches */ }
+        }
+      }
+
       return cachedIds;
     } catch {
       return new Set();
@@ -2858,38 +2866,48 @@
         card.style.cursor = "not-allowed";
       }
 
-      let badgeHTML = "";
-      if (isActive) {
-        badgeHTML = "";
-      } else if (isCached) {
-        badgeHTML = `<span class="model-badge badge-cached">Cached</span>`;
-      }
+      const cachedHTML = isCached ? `<span class="cached-label">cached</span>` : "";
 
       const tinyHTML = m.tiny ? `<span class="tiny-label">good for testing</span>` : "";
       const longLoadHTML = m.longLoad ? `<span class="long-load-label">long download</span>` : "";
       const goldilocksHTML = m.goldilocks ? `<span class="goldilocks-label">goldilocks</span>` : "";
 
-      let unloadHTML = "";
-      if (isActive) {
-        unloadHTML = `<button class="unload-btn" data-model-id="${m.id}">Unload Model</button>`;
-      }
-
       card.innerHTML = `
-        ${badgeHTML}
         <h3>${m.name}${tinyHTML}${longLoadHTML}${goldilocksHTML}</h3>
         <div class="model-desc">${m.desc}</div>
         <div class="model-tech">${m.tech}</div>
         <div class="model-size">${m.size}</div>
         <div class="model-time">${isCached ? "✓ Cached locally" : "⏱ First download: " + m.time}</div>
-        ${unloadHTML}
+        ${cachedHTML}
       `;
 
-      // Unload button handler (stop propagation so card click doesn't fire)
-      const unloadBtn = card.querySelector(".unload-btn");
-      if (unloadBtn) {
-        unloadBtn.addEventListener("click", (e) => {
+      // Cached label click: clear model from cache
+      const cachedLbl = card.querySelector(".cached-label");
+      if (cachedLbl) {
+        cachedLbl.addEventListener("click", async (e) => {
           e.stopPropagation();
-          unloadModel();
+          if (!confirm(`Remove ${m.name} from cache? You'll need to re-download it next time.`)) return;
+          try {
+            const cacheNames = await caches.keys();
+            for (const name of cacheNames) {
+              if (name.includes(m.id)) {
+                await caches.delete(name);
+                continue;
+              }
+              const cache = await caches.open(name);
+              const keys = await cache.keys();
+              for (const req of keys) {
+                if (req.url.includes(m.id) || req.url.includes(m.id.replace(/\//g, "%2F"))) {
+                  await cache.delete(req);
+                }
+              }
+            }
+            // If this was the active model, unload it
+            if (m.id === activeModelId) await unloadModel();
+            await buildModelGrid();
+          } catch (err) {
+            console.error("Failed to clear cache:", err);
+          }
         });
       }
 

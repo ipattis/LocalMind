@@ -3375,6 +3375,12 @@
       const container = document.getElementById("webgpuCheck");
       const bp = detectBrowserProfile();
 
+      // Skip browser warnings on iPhone — the unsupported banner handles it
+      const isIPhone = /iPhone|iPod/.test(navigator.userAgent);
+      if (isIPhone) {
+        return !!(navigator.gpu && await navigator.gpu.requestAdapter().catch(() => null));
+      }
+
       // Browser-specific version warnings
       if (bp.name === "Firefox") {
         container.innerHTML = `<div class="browser-version-warning">

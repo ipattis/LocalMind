@@ -7,7 +7,6 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script defer src="https://cloud.umami.is/script.js" data-website-id="20a2ec16-004c-48a3-85ab-997c062f008e"></script>
 <style>
   :root {
     --bg: #0c0c0e;
@@ -1367,6 +1366,71 @@
     background: var(--accent-glow);
     border-radius: 6px;
     margin-bottom: 4px;
+  }
+
+  /* ── Analytics Consent ── */
+  .consent-banner {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 300;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 20px;
+    max-width: 440px;
+    width: calc(100% - 40px);
+    animation: fadeIn 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .consent-banner.active { display: block; }
+
+  .consent-banner p {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .consent-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  .consent-actions button {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .consent-accept {
+    background: var(--accent-glow);
+    border: 1px solid var(--accent-dim);
+    color: var(--accent);
+  }
+
+  .consent-accept:hover {
+    background: rgba(196, 240, 110, 0.15);
+    border-color: var(--accent);
+  }
+
+  .consent-decline {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-faint);
+  }
+
+  .consent-decline:hover {
+    border-color: var(--text-dim);
+    color: var(--text-dim);
   }
 
   /* ── Stop Button ── */
@@ -3464,6 +3528,40 @@
   <div class="kb-loading-bar"><div class="kb-loading-bar-fill" id="kbLoadingBarFill"></div></div>
   <div class="kb-loading-text" id="kbLoadingText">0%</div>
 </div>
+
+<div class="consent-banner" id="consentBanner">
+  <p>Help improve LocalMind? Anonymous usage analytics (powered by Umami) let us see which models and features are popular. No personal data is collected.</p>
+  <div class="consent-actions">
+    <button class="consent-decline" onclick="handleConsent(false)">No thanks</button>
+    <button class="consent-accept" onclick="handleConsent(true)">Allow analytics</button>
+  </div>
+</div>
+
+<script>
+  function handleConsent(accepted) {
+    localStorage.setItem("analytics_consent", accepted ? "yes" : "no");
+    document.getElementById("consentBanner").classList.remove("active");
+    if (accepted) loadAnalytics();
+  }
+
+  function loadAnalytics() {
+    if (document.querySelector('script[data-website-id]')) return;
+    const s = document.createElement("script");
+    s.defer = true;
+    s.src = "https://cloud.umami.is/script.js";
+    s.dataset.websiteId = "20a2ec16-004c-48a3-85ab-997c062f008e";
+    document.head.appendChild(s);
+  }
+
+  (function () {
+    const consent = localStorage.getItem("analytics_consent");
+    if (consent === "yes") {
+      loadAnalytics();
+    } else if (consent === null) {
+      document.getElementById("consentBanner").classList.add("active");
+    }
+  })();
+</script>
 
 </body>
 </html>

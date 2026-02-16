@@ -4270,11 +4270,12 @@
         if (activeBackend === "transformers" && tfPipeline) {
           // ── Transformers.js streaming generation ──
           generationController = new AbortController();
+          const abortSignal = generationController.signal;
           const stopPromise = new Promise(resolve => { stopResolve = resolve; });
           const streamer = new TextStreamer(tfPipeline.tokenizer, {
             skip_prompt: true,
             callback_function: (token) => {
-              if (shouldStop) return;
+              if (abortSignal.aborted) return;
               fullResponse += token;
               tokenCount++;
               bubble.textContent = fullResponse;
@@ -4288,8 +4289,8 @@
             top_p: params.top_p,
             do_sample: params.temperature > 0,
             streamer,
-            stopping_criteria: [() => shouldStop],
-            signal: generationController.signal,
+            stopping_criteria: [() => abortSignal.aborted],
+            signal: abortSignal,
           }).then(() => "done").catch(() => "done");
 
           // Race: if user hits stop, UI snaps back immediately

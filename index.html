@@ -508,6 +508,23 @@
       transition: opacity 0.3s ease;
     }
 
+    .iphone-unsupported-banner {
+      background: #1a1a2a;
+      border: 1px solid #3a3a6a;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #b0b0d8;
+      line-height: 1.6;
+    }
+
+    .iphone-unsupported-banner strong {
+      color: #d0d0f0;
+      font-size: 0.95rem;
+    }
+
     .webgpu-warning {
       background: #2a1a1a;
       border: 1px solid #5a2a2a;
@@ -2526,19 +2543,6 @@
         mobileOk: "tablet"
       },
       {
-        id: "onnx-community/Qwen3-0.6B-ONNX",
-        name: "Qwen3 0.6B",
-        desc: "Lightweight Qwen3 for phones and low-RAM devices. Multilingual chat.",
-        tech: "Transformers.js v4 · ONNX Runtime Web · WebGPU · q4f16",
-        size: "~570 MB",
-        sizeMB: 570,
-        time: "~30s – 2 min",
-        backend: "transformers",
-        supportsSystemPrompt: true,
-        minRAM_GB: 2,
-        mobileOk: true
-      },
-      {
         id: "onnx-community/Qwen3-4B-Instruct-2507-ONNX",
         name: "Qwen3 4B Instruct",
         desc: "Alibaba's Qwen3 instruction-tuned model. Strong multilingual chat.",
@@ -3488,12 +3492,14 @@
       }
 
       const isLowEnd = deviceRAM_GB <= 4 && !ramCapped;
+      const isIPhone = /iPhone|iPod/.test(ua);
 
       return {
         deviceType,
         isMobile: deviceType === "mobile",
         isTablet: deviceType === "tablet",
         isDesktop: deviceType === "desktop",
+        isIPhone,
         browserName: bp.name,
         browserVersion: bp.version,
         deviceRAM_GB,
@@ -3580,6 +3586,15 @@
       for (const m of MODELS) {
         await clearModelCache(m.id);
       }
+      // Also clear any orphaned caches from models no longer in MODELS list
+      try {
+        const cacheNames = await caches.keys();
+        for (const name of cacheNames) {
+          if (name.includes("transformers") || name.includes("webllm") || name.includes("onnx")) {
+            await caches.delete(name);
+          }
+        }
+      } catch (e) { console.error("Failed to clear orphaned caches:", e); }
     }
 
     // ── Toggle Storage Section ──
@@ -3695,6 +3710,22 @@
       const dp = deviceProfile;
       let hiddenCount = 0;
 
+      // iPhone: show unsupported banner and disable all models
+      const existingBanner = grid.parentNode.querySelector(".iphone-unsupported-banner");
+      if (existingBanner) existingBanner.remove();
+      if (dp && dp.isIPhone) {
+        const banner = document.createElement("div");
+        banner.className = "iphone-unsupported-banner";
+        banner.innerHTML = `
+          <strong>iPhone not supported</strong><br>
+          Running AI models locally requires more memory than iPhone browsers currently allow.
+          Safari enforces strict per-tab memory limits that prevent models from loading.<br><br>
+          For the best experience, use a <strong>laptop or desktop</strong> with Chrome or Edge.
+          iPads with M-series chips may also work.
+        `;
+        grid.parentNode.insertBefore(banner, grid);
+      }
+
       MODELS.forEach((m) => {
         const isActive = m.id === activeModelId;
         const isCached = cachedIds.has(m.id);
@@ -3704,7 +3735,10 @@
         let deviceIncompat = false;
         let deviceIncompatReason = "";
         if (dp) {
-          if (m.mobileOk === false && (dp.isMobile || dp.isTablet)) {
+          if (dp.isIPhone) {
+            deviceIncompat = true;
+            deviceIncompatReason = "Not supported on iPhone — insufficient browser memory";
+          } else if (m.mobileOk === false && (dp.isMobile || dp.isTablet)) {
             deviceIncompat = true;
             deviceIncompatReason = "Requires desktop — too large for this device";
           } else if (m.mobileOk === "tablet" && dp.isMobile) {
@@ -4012,13 +4046,11 @@
         if (selectedModel.backend === "transformers") {
           // ── Transformers.js v4 / ONNX Runtime Web path ──
           const fileProgress = new Map();
-          const tfDevice = "webgpu";
-          const tfDtype = "q4f16";
           const TOTAL_FILE_SIZE = selectedModel.sizeMB * 1e6;
           label.textContent = "Loading ONNX model via Transformers.js…";
           tfPipeline = await createPipeline("text-generation", selectedModel.id, {
-            dtype: tfDtype,
-            device: tfDevice,
+            dtype: "q4f16",
+            device: "webgpu",
             progress_callback: (p) => {
               if (p.status === "progress" && typeof p.loaded === "number") {
                 fileProgress.set(p.file, p.loaded);

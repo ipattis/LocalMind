@@ -2582,6 +2582,7 @@
     let kbDocuments = new Map(); // in-memory metadata cache
     let isGenerating = false;
     let shouldStop = false;
+    let generationController = null;
 
     const EMBEDDING_MODEL = {
       id: "onnx-community/Qwen3-Embedding-0.6B-ONNX",
@@ -3356,6 +3357,9 @@
       shouldStop = true;
       if (activeBackend === "webllm" && engine) {
         try { engine.interruptGenerate(); } catch (e) { console.error(e); }
+      }
+      if (generationController) {
+        try { generationController.abort(); } catch (e) { console.error(e); }
       }
     };
 
@@ -4262,6 +4266,7 @@
       try {
         if (activeBackend === "transformers" && tfPipeline) {
           // ── Transformers.js streaming generation ──
+          generationController = new AbortController();
           const streamer = new TextStreamer(tfPipeline.tokenizer, {
             skip_prompt: true,
             callback_function: (token) => {
@@ -4280,7 +4285,9 @@
             do_sample: params.temperature > 0,
             streamer,
             stopping_criteria: [() => shouldStop],
+            signal: generationController.signal,
           });
+          generationController = null;
 
           chatHistory.push({ role: "assistant", content: fullResponse });
 
@@ -4321,13 +4328,14 @@
         }
 
       } catch (err) {
-        if (!shouldStop) {
+        if (!shouldStop && err.name !== "AbortError") {
           bubble.textContent = `[Error: ${err.message}]`;
           console.error(err);
           document.getElementById("tokenInfo").textContent = "Error";
         }
       }
 
+      generationController = null;
       isGenerating = false;
       shouldStop = false;
       hideStopButton();

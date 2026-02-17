@@ -2758,6 +2758,7 @@
     let embeddingPipeline = null; // Transformers.js embedding pipeline for KB
     let ragEnabled = localStorage.getItem("kb_ragEnabled") === "true";
     let kbDocuments = new Map(); // in-memory metadata cache
+    let kbChunkCache = null;     // in-memory chunk cache (avoids repeated IDB reads)
     let isGenerating = false;
     let shouldStop = false;
     let generationController = null;
@@ -3192,6 +3193,7 @@
       metaTx.objectStore(KB_META_STORE_NAME).put(meta);
 
       kbDocuments.set(docId, meta);
+      invalidateKBChunkCache();
       hideKBLoadingOverlay();
       refreshKBDocList();
 
@@ -3270,6 +3272,7 @@
         metaTx.objectStore(KB_META_STORE_NAME).delete(docId);
 
         kbDocuments.delete(docId);
+        invalidateKBChunkCache();
         refreshKBDocList();
       } catch (e) {
         console.error("Failed to remove KB document:", e);
@@ -3285,6 +3288,7 @@
         const tx2 = db.transaction(KB_META_STORE_NAME, "readwrite");
         tx2.objectStore(KB_META_STORE_NAME).clear();
         kbDocuments.clear();
+        invalidateKBChunkCache();
         ragEnabled = false;
         localStorage.setItem("kb_ragEnabled", "false");
         document.getElementById("kbToggle").checked = false;
@@ -3327,23 +3331,36 @@
       return 0.6 * jaccard + 0.4 * (freqBoost / maxBoost);
     }
 
+    async function loadKBChunks() {
+      if (kbChunkCache) return kbChunkCache;
+      const db = await openDB();
+      const tx = db.transaction(KB_STORE_NAME, "readonly");
+      const chunks = await new Promise((resolve) => {
+        const req = tx.objectStore(KB_STORE_NAME).getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => resolve([]);
+      });
+      // Pre-convert embeddings to Float32Array once
+      for (const chunk of chunks) {
+        chunk._vec = new Float32Array(chunk.embedding);
+      }
+      kbChunkCache = chunks;
+      return chunks;
+    }
+
+    function invalidateKBChunkCache() {
+      kbChunkCache = null;
+    }
+
     async function retrieveRelevantChunks(query, topK = 5) {
       if (!embeddingPipeline || kbDocuments.size === 0) return [];
 
       const queryVec = await embedText(query);
       const { keywords: queryKeywords } = extractKeywords(query);
-
-      const db = await openDB();
-      const tx = db.transaction(KB_STORE_NAME, "readonly");
-      const allChunks = await new Promise((resolve) => {
-        const req = tx.objectStore(KB_STORE_NAME).getAll();
-        req.onsuccess = () => resolve(req.result || []);
-        req.onerror = () => resolve([]);
-      });
+      const allChunks = await loadKBChunks();
 
       const scored = allChunks.map(chunk => {
-        const chunkVec = new Float32Array(chunk.embedding);
-        const semanticScore = cosineSimilarity(queryVec, chunkVec);
+        const semanticScore = cosineSimilarity(queryVec, chunk._vec);
         const keywordScore = calculateKeywordScore(queryKeywords, chunk.keywords || [], chunk.wordFreq || {});
         const score = 0.7 * semanticScore + 0.3 * keywordScore;
         return { ...chunk, score, semanticScore, keywordScore };

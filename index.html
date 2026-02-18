@@ -4717,7 +4717,7 @@
                 if (stopped || shouldStop) return;
                 fullResponse += chunk;
                 tokenCount++;
-                bubble.textContent = fullResponse;
+                renderStreamingMarkdown(bubble, fullResponse);
                 scrollToBottom();
                 if (done) resolve();
               });
@@ -4750,7 +4750,7 @@
               if (abortSignal.aborted) return;
               fullResponse += token;
               tokenCount++;
-              bubble.textContent = fullResponse;
+              renderStreamingMarkdown(bubble, fullResponse);
               scrollToBottom();
             },
           });
@@ -4794,7 +4794,7 @@
             const delta = chunk.choices[0]?.delta?.content || "";
             fullResponse += delta;
             tokenCount++;
-            bubble.textContent = fullResponse;
+            renderStreamingMarkdown(bubble, fullResponse);
             scrollToBottom();
           }
 
@@ -4832,6 +4832,14 @@
     };
 
     // ── Helpers ──
+    function renderStreamingMarkdown(el, text) {
+      // Fix unclosed code fences before rendering
+      const fenceCount = (text.match(/```/g) || []).length;
+      const sanitized = fenceCount % 2 !== 0 ? text + "\n```" : text;
+      el.innerHTML = marked.parse(sanitized);
+      el.classList.add("rendered");
+    }
+
     function appendMessage(role, text) {
       const container = document.getElementById("messages");
       const div = document.createElement("div");

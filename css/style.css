@@ -187,6 +187,7 @@ a.logo-product:hover {
 /* Nav section */
 .nav-section {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -205,9 +206,7 @@ a.logo-product:hover {
   cursor: pointer;
   transition: all 0.14s;
   text-decoration: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  flex-shrink: 0;
 }
 
 .convo-item:hover {
@@ -228,6 +227,7 @@ a.logo-product:hover {
 .convo-label {
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Sidebar footer */
@@ -237,6 +237,7 @@ a.logo-product:hover {
   display: flex;
   flex-direction: column;
   gap: 7px;
+  flex-shrink: 0;
 }
 
 .footer-note {

@@ -73,12 +73,38 @@ function getActiveConvo() {
 function renderConversationList() {
   const list = document.getElementById("conversationList");
   if (!list) return;
-  list.innerHTML = conversations.map(c => `
-    <div class="convo-item${c.id === activeConvoId ? " active" : ""}" onclick="switchConversation('${c.id}')" title="${c.label}">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-      <span class="convo-label">${c.label}</span>
-    </div>
-  `).join("");
+
+  while (list.firstChild) list.removeChild(list.firstChild);
+
+  for (const c of conversations) {
+    const div = document.createElement("div");
+    div.className = "convo-item" + (c.id === activeConvoId ? " active" : "");
+    div.title = c.label;
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", "14");
+    svg.setAttribute("height", "14");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("fill", "none");
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z");
+    path.setAttribute("stroke", "currentColor");
+    path.setAttribute("stroke-width", "1.6");
+    path.setAttribute("stroke-linejoin", "round");
+    svg.appendChild(path);
+
+    const span = document.createElement("span");
+    span.className = "convo-label";
+    span.textContent = c.label;
+
+    div.appendChild(svg);
+    div.appendChild(span);
+
+    const convoId = c.id;
+    div.addEventListener("click", () => window.switchConversation(convoId));
+
+    list.appendChild(div);
+  }
 }
 
 window.switchConversation = function (id) {

@@ -33,7 +33,7 @@ let deviceProfile = null;
 
 // ── IndexedDB Conversation Persistence ──
 const DB_NAME = "thinkhere";
-const DB_VERSION = 1;
+const DB_VERSION = 3;
 const STORE_NAME = "conversations";
 let currentConvId = null;
 
@@ -67,7 +67,7 @@ async function saveConversation() {
     await new Promise((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, "readwrite");
       tx.objectStore(STORE_NAME).put(conv);
-      tx.oncomplete = () => { console.log("Conversation saved:", id, conv.title); resolve(); };
+      tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
     });
   } catch (e) { console.error("Failed to save conversation:", e); }
@@ -135,9 +135,8 @@ async function updateConversationTitle(id, title) {
 
 async function renderConversationList() {
   const list = document.getElementById("conversationList");
-  if (!list) { console.warn("conversationList element not found"); return; }
+  if (!list) return;
   const convs = await loadConversationList();
-  console.log("renderConversationList:", convs.length, "conversations", convs);
 
   while (list.firstChild) list.removeChild(list.firstChild);
 

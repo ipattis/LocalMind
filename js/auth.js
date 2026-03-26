@@ -161,7 +161,7 @@ function getAuthenticatedUser() {
 // ── Init: handle callback or update UI ──
 (function () {
   // If this is a callback from Cognito, handle it
-  if (window.location.hash.includes("id_token")) {
+  if (window.location.hash.includes("id_token") || window.location.pathname.includes("/callback")) {
     if (handleAuthCallback()) return; // Redirecting to app
   }
 

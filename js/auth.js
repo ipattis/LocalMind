@@ -127,16 +127,8 @@ function handleAuthCallback() {
   if (tokens) {
     storeTokens(tokens);
 
-    // Clean the URL
-    window.history.replaceState(null, "", window.location.pathname);
-
-    // Redirect to the authenticated app with the token
-    const payload = parseJwtPayload(tokens.idToken);
-    const email = payload?.email || "";
-    console.log(`Authenticated as ${email}, redirecting to app...`);
-
-    // Pass token to app.thinkhere.ai via URL fragment
-    window.location.href = `${AUTH_CONFIG.appUrl}/#id_token=${tokens.idToken}&access_token=${tokens.accessToken}`;
+    // Clean the URL and stay on thinkhere.ai
+    window.location.href = AUTH_CONFIG.signOutRedirectUri;
     return true;
   }
 
@@ -165,21 +157,25 @@ function getAuthenticatedUser() {
     if (handleAuthCallback()) return; // Redirecting to app
   }
 
-  // If user is already authenticated, show "Go to App" instead of sign in
+  // If user is already authenticated, update header buttons
   if (isAuthenticated()) {
     const user = getAuthenticatedUser();
     const signInBtn = document.getElementById("signInBtn");
     const createAccountBtn = document.getElementById("createAccountBtn");
+    const sidebarSignInBtn = document.getElementById("sidebarSignInBtn");
 
     if (signInBtn && user) {
-      signInBtn.textContent = "Open App";
-      signInBtn.onclick = () => {
-        const tokens = getStoredTokens();
-        window.location.href = `${AUTH_CONFIG.appUrl}/#id_token=${tokens.idToken}&access_token=${tokens.accessToken}`;
-      };
+      signInBtn.textContent = "Sign out";
+      signInBtn.onclick = () => window.signOut();
     }
-    if (createAccountBtn) {
-      createAccountBtn.style.display = "none";
+    if (createAccountBtn && user) {
+      createAccountBtn.textContent = user.email;
+      createAccountBtn.onclick = null;
+      createAccountBtn.style.cursor = "default";
+    }
+    if (sidebarSignInBtn) {
+      sidebarSignInBtn.textContent = user.email;
+      sidebarSignInBtn.onclick = null;
     }
   }
 })();

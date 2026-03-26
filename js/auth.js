@@ -3,9 +3,9 @@
 
 const AUTH_CONFIG = {
   // AWS Cognito User Pool settings
-  userPoolId: "YOUR_USER_POOL_ID",           // e.g. "us-east-1_aBcDeFgHi"
-  clientId: "YOUR_APP_CLIENT_ID",             // e.g. "1a2b3c4d5e6f7g8h9i0j"
-  cognitoDomain: "YOUR_COGNITO_DOMAIN",       // e.g. "thinkhere.auth.us-east-1.amazoncognito.com"
+  userPoolId: "us-east-1_LSizPNStx",
+  clientId: "21r4hda7dvc55rktfpmuj78ife",
+  cognitoDomain: "thinkhere.auth.us-east-1.amazoncognito.com",
   region: "us-east-1",
 
   // Redirect URIs (must match Cognito App Client settings)

@@ -13,7 +13,7 @@
   <style>
     /* ── About Page Styles ── */
     .page-wrap {
-      max-width: 860px;
+      max-width: 1020px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -118,7 +118,7 @@
       line-height: 1.6;
     }
 
-    /* How It Works */
+    /* How It Works / Architecture */
     .how-section {
       padding: 40px 0 60px;
     }
@@ -132,44 +132,169 @@
       margin: 0 auto 40px;
     }
 
-    .flow-diagram {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-      flex-wrap: wrap;
+    .arch-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
     }
 
-    .flow-step {
+    .arch-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px 24px;
-      text-align: center;
-      min-width: 140px;
+      padding: 20px;
     }
 
-    .flow-step .step-label {
+    .arch-card h4 {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 12px;
+      letter-spacing: 0.03em;
+    }
+
+    .arch-card p {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      text-align: left;
+      margin-bottom: 12px;
+    }
+
+    .arch-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .arch-card .arch-label {
       font-family: var(--font-mono);
       font-size: 0.65rem;
       color: var(--text-faint);
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
 
-    .flow-step .step-text {
+    .arch-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 12px;
+    }
+
+    .arch-card li {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .arch-card li::before {
+      content: '·';
+      position: absolute;
+      left: 2px;
+      color: var(--text-faint);
+      font-weight: bold;
+    }
+
+    .arch-flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 16px 12px;
+      background: var(--bg);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .arch-flow-step {
+      width: 100%;
+      background: var(--surface-2, var(--surface));
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      text-align: center;
       font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--text);
-      font-weight: 500;
+      font-size: 0.68rem;
+      font-weight: 400;
+      color: var(--text-dim);
+      letter-spacing: 0.02em;
+      line-height: 1.4;
     }
 
-    .flow-arrow {
+    .arch-flow-step .step-sub {
+      display: block;
+      font-size: 0.58rem;
+      color: var(--text-faint);
+      font-weight: 300;
+      margin-top: 2px;
+      letter-spacing: 0.03em;
+    }
+
+    .arch-flow-step.highlight {
+      border-color: var(--accent-dim);
+      background: rgba(196, 240, 110, 0.04);
+      color: var(--accent);
+    }
+
+    .arch-flow-step.highlight .step-sub {
       color: var(--accent-dim);
-      font-size: 1.4rem;
-      padding: 0 12px;
+    }
+
+    .arch-flow-step.step-end {
+      background: transparent;
+      border-style: dashed;
+      color: var(--text-faint);
+    }
+
+    .arch-flow-step.step-fork {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+
+    .arch-flow-step.step-fork .fork-option {
+      flex: 1;
+      background: var(--surface-2, var(--surface));
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 6px;
       font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      text-align: center;
+    }
+
+    .arch-flow-step.step-fork .fork-primary {
+      border-color: var(--accent-dim);
+      color: var(--accent-dim);
+    }
+
+    .arch-flow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 0;
+      color: var(--border);
+    }
+
+    .arch-flow-arrow svg {
+      width: 12px;
+      height: 18px;
+    }
+
+    .arch-shared {
+      margin-top: 16px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-faint);
+      letter-spacing: 0.03em;
+      line-height: 1.6;
     }
 
     /* CTA */
@@ -244,6 +369,12 @@
     }
 
     /* Responsive */
+    @media (max-width: 900px) {
+      .arch-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
     @media (max-width: 680px) {
       .hero h1 {
         font-size: 2rem;
@@ -253,13 +384,8 @@
         grid-template-columns: 1fr;
       }
 
-      .flow-diagram {
-        flex-direction: column;
-      }
-
-      .flow-arrow {
-        transform: rotate(90deg);
-        padding: 8px 0;
+      .arch-columns {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -315,32 +441,80 @@
         </div>
       </section>
 
-      <!-- How It Works -->
+      <!-- How It Works — Three Architectures -->
       <section class="how-section">
-        <h2 class="section-title">How it works</h2>
-        <p class="how-description">ThinkHere uses Google's MediaPipe LLM Inference API to run language models directly in your browser via WebGPU. Model weights are downloaded once and cached locally in your browser's storage, so subsequent loads take just seconds.</p>
+        <h2 class="section-title">Three paths to <em>in-browser</em> AI</h2>
+        <p class="how-description">ThinkHere supports three different inference backends, each with its own trade-offs. All three use WebGPU for GPU acceleration, and all model weights are cached in your browser after the first download.</p>
 
-        <div class="flow-diagram">
-          <div class="flow-step">
-            <div class="step-label">Step 1</div>
-            <div class="step-text">Load model weights</div>
+        <div class="arch-columns">
+          <div class="arch-card">
+            <h4>WebLLM + MLC</h4>
+            <div class="arch-flow">
+              <div class="arch-flow-step">HuggingFace<span class="step-sub">MLC-format weights</span></div>
+              <div class="arch-flow-arrow"><svg viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="currentColor" stroke-width="1.5"/><polyline points="2.5,9.5 6,14 9.5,9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <div class="arch-flow-step highlight">TVM / MLC Compiler<span class="step-sub">Ahead-of-time compilation</span></div>
+              <div class="arch-flow-arrow"><svg viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="currentColor" stroke-width="1.5"/><polyline points="2.5,9.5 6,14 9.5,9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <div class="arch-flow-step">WebGPU Compute Shaders<span class="step-sub">Pre-optimized GPU kernels</span></div>
+              <div class="arch-flow-arrow"><svg viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="currentColor" stroke-width="1.5"/><polyline points="2.5,9.5 6,14 9.5,9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <div class="arch-flow-step step-end">Your GPU</div>
+            </div>
+            <p>Models are compiled ahead-of-time using <strong>Apache TVM / MLC</strong> (Machine Learning Compilation). The compiler transforms model weights and operations into optimized <strong>WebGPU compute shaders</strong> that run directly on your GPU.</p>
+            <div class="arch-label">Trade-offs</div>
+            <ul>
+              <li>Fast inference — kernels are pre-optimized</li>
+              <li>First run compiles shaders for your GPU (cached after)</li>
+              <li>Model must be specifically compiled for MLC</li>
+            </ul>
+            <p class="arch-label">Used by</p>
+            <p>SmolLM2 360M, SmolLM2 1.7B, Qwen3 4B, Phi-3.5 Mini, Llama 3.2 1B</p>
           </div>
-          <div class="flow-arrow">&rarr;</div>
-          <div class="flow-step">
-            <div class="step-label">Step 2</div>
-            <div class="step-text">Compile via WebGPU</div>
+          <div class="arch-card">
+            <h4>Transformers.js + ONNX Runtime Web</h4>
+            <div class="arch-flow">
+              <div class="arch-flow-step">HuggingFace<span class="step-sub">ONNX-format model graph + weights</span></div>
+              <div class="arch-flow-arrow"><svg viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="currentColor" stroke-width="1.5"/><polyline points="2.5,9.5 6,14 9.5,9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <div class="arch-flow-step highlight">ONNX Runtime Web<span class="step-sub">Builds execution plan at load time</span></div>
+              <div class="arch-flow-arrow"><svg viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="currentColor" stroke-width="1.5"/><polyline points="2.5,9.5 6,14 9.5,9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <div class="arch-flow-step step-fork">
+                <div class="fork-option fork-primary">WebGPU</div>
+                <div class="fork-option">WASM fallback</div>
+              </div>
+              <div class="arch-flow-arrow"><svg viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="currentColor" stroke-width="1.5"/><polyline points="2.5,9.5 6,14 9.5,9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <div class="arch-flow-step step-end">Your GPU / CPU</div>
+            </div>
+            <p>Models are stored in the standard <strong>ONNX</strong> (Open Neural Network Exchange) format. <strong>ONNX Runtime Web</strong> interprets the model graph at load time and executes it on your GPU via WebGPU, or falls back to WebAssembly on unsupported hardware.</p>
+            <div class="arch-label">Trade-offs</div>
+            <ul>
+              <li>Supports any model exportable to ONNX</li>
+              <li>Can fall back to WASM if WebGPU is unavailable</li>
+              <li>Slightly more overhead than pre-compiled kernels</li>
+            </ul>
+            <p class="arch-label">Used by</p>
+            <p>Qwen3.5 0.8B, Qwen3.5 2B, Qwen3.5 4B</p>
           </div>
-          <div class="flow-arrow">&rarr;</div>
-          <div class="flow-step">
-            <div class="step-label">Step 3</div>
-            <div class="step-text">Inference on your GPU</div>
-          </div>
-          <div class="flow-arrow">&rarr;</div>
-          <div class="flow-step">
-            <div class="step-label">Step 4</div>
-            <div class="step-text">Response stays local</div>
+          <div class="arch-card">
+            <h4>MediaPipe + LiteRT</h4>
+            <div class="arch-flow">
+              <div class="arch-flow-step">HuggingFace<span class="step-sub">LiteRT model file (.litertlm)</span></div>
+              <div class="arch-flow-arrow"><svg viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="currentColor" stroke-width="1.5"/><polyline points="2.5,9.5 6,14 9.5,9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <div class="arch-flow-step highlight">MediaPipe GenAI<span class="step-sub">LLM Inference API</span></div>
+              <div class="arch-flow-arrow"><svg viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="currentColor" stroke-width="1.5"/><polyline points="2.5,9.5 6,14 9.5,9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <div class="arch-flow-step">WebGPU Compute<span class="step-sub">Multimodal: text + images</span></div>
+              <div class="arch-flow-arrow"><svg viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="currentColor" stroke-width="1.5"/><polyline points="2.5,9.5 6,14 9.5,9.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <div class="arch-flow-step step-end">Your GPU</div>
+            </div>
+            <p>Google's <strong>MediaPipe LLM Inference</strong> API loads Gemma models in the <strong>LiteRT</strong> format (formerly TFLite). Supports multimodal input — text and images — all processed on-device via WebGPU.</p>
+            <div class="arch-label">Trade-offs</div>
+            <ul>
+              <li>Multimodal: text and image input</li>
+              <li>Single large file download (no split shards)</li>
+              <li>Requires WebGPU — no WASM fallback</li>
+            </ul>
+            <p class="arch-label">Used by</p>
+            <p>Gemma 3n E2B, Gemma 3n E4B</p>
           </div>
         </div>
+        <div class="arch-shared">All three methods use WebGPU for GPU acceleration. All model weights are cached in your browser after the first download — no server involved.</div>
       </section>
 
       <!-- CTA -->

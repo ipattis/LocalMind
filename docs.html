@@ -460,16 +460,17 @@
       <!-- Getting Started -->
       <section class="docs-section">
         <h2>Getting Started</h2>
-        <p>ThinkHere runs entirely in your browser. There is nothing to install, no API keys to configure, and no account required to start chatting.</p>
+        <p>ThinkHere runs entirely in your browser. There is nothing to install and no account is required to start chatting.</p>
 
+        <h3>No account</h3>
         <div class="steps">
           <div class="step">
             <div class="step-num">Step 1</div>
-            <div class="step-text">Open <a href="index.html" style="color: var(--accent); text-decoration: none;">thinkhere.ai</a> in a supported browser</div>
+            <div class="step-text">Open <a href="/" style="color: var(--accent); text-decoration: none;">thinkhere.ai</a> in a supported browser</div>
           </div>
           <div class="step">
             <div class="step-num">Step 2</div>
-            <div class="step-text">Click <strong>Load Model</strong> to download and initialize the AI</div>
+            <div class="step-text">Click <strong>Load Model</strong> to download and initialize Gemma 3n E2B</div>
           </div>
           <div class="step">
             <div class="step-num">Step 3</div>
@@ -477,13 +478,29 @@
           </div>
         </div>
 
-        <p>The first load downloads model weights (1&ndash;3 GB depending on the model). After that, the model loads from your browser's cache in seconds.</p>
+        <h3>With a free account</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">Step 1</div>
+            <div class="step-text">Create a free account at <a href="https://app.thinkhere.ai" style="color: var(--accent); text-decoration: none;">app.thinkhere.ai</a></div>
+          </div>
+          <div class="step">
+            <div class="step-num">Step 2</div>
+            <div class="step-text">Choose from 10 models and click <strong>Load</strong></div>
+          </div>
+          <div class="step">
+            <div class="step-num">Step 3</div>
+            <div class="step-text">Conversations are saved automatically and can be exported</div>
+          </div>
+        </div>
+
+        <p>The first load downloads model weights (250 MB&ndash;4 GB depending on the model). After that, the model loads from your browser's cache in seconds.</p>
       </section>
 
       <!-- Tier Comparison -->
       <section class="docs-section">
         <h2>Feature Tiers</h2>
-        <p>ThinkHere offers three tiers. All tiers run the model locally in your browser &mdash; we never see your conversations.</p>
+        <p>ThinkHere offers three tiers. All tiers run the model locally in your browser &mdash; your conversations never leave your device.</p>
 
         <div class="tier-table-wrap">
           <table class="tier-table">
@@ -491,73 +508,67 @@
               <tr>
                 <th>Feature</th>
                 <th>Free</th>
-                <th>Logged In (Free)</th>
-                <th>Paid (Monthly)</th>
+                <th>Logged In</th>
+                <th>Pro</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="feature-name">Gemma 3n E2B</td>
+                <td class="feature-name">Gemma 3n E2B (multimodal)</td>
                 <td><span class="check">&#10003;</span></td>
                 <td><span class="check">&#10003;</span></td>
                 <td><span class="check">&#10003;</span></td>
               </tr>
               <tr>
-                <td class="feature-name">All models (9+)</td>
+                <td class="feature-name">All 10 models</td>
                 <td><span class="dash">&mdash;</span></td>
                 <td><span class="check">&#10003;</span></td>
                 <td><span class="check">&#10003;</span></td>
               </tr>
               <tr>
-                <td class="feature-name">Multimodal (images)</td>
+                <td class="feature-name">File &amp; PDF upload as context</td>
                 <td><span class="check">&#10003;</span></td>
+                <td><span class="check">&#10003;</span></td>
+                <td><span class="check">&#10003;</span></td>
+              </tr>
+              <tr>
+                <td class="feature-name">Conversation history &amp; saving</td>
+                <td><span class="dash">&mdash;</span></td>
+                <td><span class="check">&#10003;</span></td>
+                <td><span class="check">&#10003;</span></td>
+              </tr>
+              <tr>
+                <td class="feature-name">Conversation export</td>
+                <td><span class="dash">&mdash;</span></td>
+                <td><span class="check">&#10003;</span></td>
+                <td><span class="check">&#10003;</span></td>
+              </tr>
+              <tr>
+                <td class="feature-name">Context compression (long chats)</td>
+                <td><span class="dash">&mdash;</span></td>
                 <td><span class="check">&#10003;</span></td>
                 <td><span class="check">&#10003;</span></td>
               </tr>
               <tr>
                 <td class="feature-name">System prompts</td>
                 <td><span class="dash">&mdash;</span></td>
-                <td><span class="check">&#10003;</span></td>
+                <td><span class="dash">&mdash;</span></td>
                 <td><span class="check">&#10003;</span></td>
               </tr>
               <tr>
-                <td class="feature-name">Temperature / generation controls</td>
+                <td class="feature-name">Temperature &amp; generation controls</td>
                 <td><span class="dash">&mdash;</span></td>
-                <td><span class="check">&#10003;</span></td>
-                <td><span class="check">&#10003;</span></td>
-              </tr>
-              <tr>
-                <td class="feature-name">Conversation history</td>
                 <td><span class="dash">&mdash;</span></td>
-                <td><span class="check">&#10003;</span></td>
-                <td><span class="check">&#10003;</span></td>
-              </tr>
-              <tr>
-                <td class="feature-name">Export conversations</td>
-                <td><span class="dash">&mdash;</span></td>
-                <td><span class="check">&#10003;</span></td>
                 <td><span class="check">&#10003;</span></td>
               </tr>
               <tr>
                 <td class="feature-name">Knowledge base / RAG</td>
                 <td><span class="dash">&mdash;</span></td>
-                <td><span class="check">&#10003;</span></td>
-                <td><span class="check">&#10003;</span></td>
-              </tr>
-              <tr>
-                <td class="feature-name">File upload as context</td>
                 <td><span class="dash">&mdash;</span></td>
-                <td><span class="check">&#10003;</span></td>
                 <td><span class="check">&#10003;</span></td>
               </tr>
               <tr>
                 <td class="feature-name">Priority support</td>
-                <td><span class="dash">&mdash;</span></td>
-                <td><span class="dash">&mdash;</span></td>
-                <td><span class="check">&#10003;</span></td>
-              </tr>
-              <tr>
-                <td class="feature-name">Premium features (coming soon)</td>
                 <td><span class="dash">&mdash;</span></td>
                 <td><span class="dash">&mdash;</span></td>
                 <td><span class="check">&#10003;</span></td>
@@ -603,7 +614,7 @@
       <!-- Models -->
       <section class="docs-section">
         <h2>Available Models</h2>
-        <p>The following models are available in the logged-in tier. The free tier includes Gemma 3n E2B only.</p>
+        <p>The free tier on thinkhere.ai includes Gemma 3n E2B. All 10 models are available with a free account at <a href="https://app.thinkhere.ai" style="color: var(--accent); text-decoration: none;">app.thinkhere.ai</a>.</p>
 
         <div class="models-table-wrap">
           <table class="models-table">
@@ -611,6 +622,7 @@
               <tr>
                 <th>Model</th>
                 <th>Family</th>
+                <th>Runtime</th>
                 <th>Size</th>
                 <th>Tier</th>
               </tr>
@@ -619,62 +631,78 @@
               <tr>
                 <td class="model-name">Gemma 3n E2B</td>
                 <td>Gemma</td>
+                <td>MediaPipe</td>
                 <td>~3 GB</td>
                 <td><span class="tag free">Free</span></td>
               </tr>
               <tr>
                 <td class="model-name">Gemma 3n E4B</td>
                 <td>Gemma</td>
-                <td>~4 GB</td>
+                <td>MediaPipe</td>
+                <td>~4.3 GB</td>
                 <td>Logged In</td>
               </tr>
               <tr>
-                <td class="model-name">Gemma 3 1B</td>
-                <td>Gemma</td>
-                <td>~1.3 GB</td>
+                <td class="model-name">SmolLM2 360M</td>
+                <td>SmolLM</td>
+                <td>WebLLM</td>
+                <td>~250 MB</td>
                 <td>Logged In</td>
               </tr>
               <tr>
-                <td class="model-name">Gemma 2 2B</td>
-                <td>Gemma</td>
-                <td>~1.6 GB</td>
-                <td>Logged In</td>
-              </tr>
-              <tr>
-                <td class="model-name">Phi-4 Mini</td>
-                <td>Phi</td>
-                <td>~2.3 GB</td>
+                <td class="model-name">SmolLM2 1.7B</td>
+                <td>SmolLM</td>
+                <td>WebLLM</td>
+                <td>~1 GB</td>
                 <td>Logged In</td>
               </tr>
               <tr>
                 <td class="model-name">Llama 3.2 1B</td>
                 <td>Llama</td>
-                <td>~1.3 GB</td>
+                <td>WebLLM</td>
+                <td>~700 MB</td>
                 <td>Logged In</td>
               </tr>
               <tr>
-                <td class="model-name">Llama 3.2 3B</td>
-                <td>Llama</td>
-                <td>~2.1 GB</td>
+                <td class="model-name">Phi-3.5 Mini</td>
+                <td>Phi</td>
+                <td>WebLLM</td>
+                <td>~2.2 GB</td>
                 <td>Logged In</td>
               </tr>
               <tr>
-                <td class="model-name">Qwen3.5 0.6B</td>
+                <td class="model-name">Qwen3 4B</td>
                 <td>Qwen</td>
-                <td>~0.8 GB</td>
+                <td>WebLLM</td>
+                <td>~2.9 GB</td>
                 <td>Logged In</td>
               </tr>
               <tr>
-                <td class="model-name">Qwen3.5 1.7B</td>
+                <td class="model-name">Qwen3.5 0.8B</td>
                 <td>Qwen</td>
-                <td>~1.4 GB</td>
+                <td>Transformers.js</td>
+                <td>~600 MB</td>
+                <td>Logged In</td>
+              </tr>
+              <tr>
+                <td class="model-name">Qwen3.5 2B</td>
+                <td>Qwen</td>
+                <td>Transformers.js</td>
+                <td>~1.5 GB</td>
+                <td>Logged In</td>
+              </tr>
+              <tr>
+                <td class="model-name">Qwen3.5 4B</td>
+                <td>Qwen</td>
+                <td>Transformers.js</td>
+                <td>~2.9 GB</td>
                 <td>Logged In</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <p>Model sizes are approximate and represent the download size. Larger models generally produce higher quality responses but require more RAM and may generate tokens more slowly.</p>
+        <p>Model sizes are approximate download sizes. Larger models generally produce higher quality output but require more RAM and generate tokens more slowly. Both Gemma 3n models support multimodal input (images and PDFs).</p>
       </section>
 
     </div>

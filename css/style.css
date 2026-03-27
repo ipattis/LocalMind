@@ -1446,6 +1446,25 @@ a.logo-product:hover {
   text-decoration: underline;
 }
 
+/* ── Legal footer ── */
+.legal {
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  padding: 12px 20px 14px;
+  flex-shrink: 0;
+}
+
+.legal a {
+  color: var(--text-muted);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.legal a:hover {
+  color: var(--text);
+}
+
 /* ── Mobile sidebar toggle ── */
 .sidebar-toggle {
   display: none;

@@ -702,6 +702,8 @@ window.loadModel = async function () {
 
   setPhase("download");
 
+  let downloadSucceeded = false;
+
   try {
     label.textContent = "Checking cache...";
 
@@ -730,27 +732,26 @@ window.loadModel = async function () {
       statProgress.textContent = "100%";
     }
 
-    let downloadSucceeded = true;
+    downloadSucceeded = true;
 
     // Compile phase
     setPhase("compile");
     label.textContent = "Initializing MediaPipe LLM engine...";
     tip.textContent = "Creating inference session — this may take a moment.";
 
-    const blobUrl = URL.createObjectURL(blob);
-    try {
-      const genai = await FilesetResolver.forGenAiTasks(MEDIAPIPE_WASM_PATH);
-      mpInference = await LlmInference.createFromOptions(genai, {
-        baseOptions: { modelAssetPath: blobUrl },
-        maxTokens: 4096,
-        topK: 40,
-        temperature: 0.7,
-        randomSeed: Math.floor(Math.random() * 1e9),
-        maxNumImages: 4,
-      });
-    } finally {
-      URL.revokeObjectURL(blobUrl);
-    }
+    // Use modelAssetBuffer to avoid blob URL double-memory OOM
+    const buffer = await blob.arrayBuffer();
+    blob = null; // free blob memory before inference engine allocates
+
+    const genai = await FilesetResolver.forGenAiTasks(MEDIAPIPE_WASM_PATH);
+    mpInference = await LlmInference.createFromOptions(genai, {
+      baseOptions: { modelAssetBuffer: buffer },
+      maxTokens: 4096,
+      topK: 40,
+      temperature: 0.7,
+      randomSeed: Math.floor(Math.random() * 1e9),
+      maxNumImages: 4,
+    });
 
     // Done
     clearInterval(timerInterval);
@@ -784,7 +785,7 @@ window.loadModel = async function () {
     const msg = (err.message || "").toLowerCase();
 
     // Only classify as network/blocked if the download itself failed
-    const isDownloadError = typeof downloadSucceeded === "undefined" || !downloadSucceeded;
+    const isDownloadError = !downloadSucceeded;
     const isBlocked = isDownloadError && (msg.includes("403") || msg.includes("cors"));
     const isNetworkError = isDownloadError && (msg.includes("failed to fetch") || msg.includes("network") || msg.includes("blocked") || msg.includes("timeout") || msg.includes("abort"));
 

@@ -434,60 +434,137 @@ async function getMediaPipeCachedBlob(modelFile) {
   return null;
 }
 
+// ── Service Worker Registration ──
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js").then((reg) => {
+    console.log("SW registered:", reg.scope);
+  }).catch((err) => {
+    console.warn("SW registration failed:", err);
+  });
+}
+
+// ── Download Model (SW-delegated with direct-fetch fallback) ──
 async function downloadMediaPipeModel(hfRepo, modelFile, onProgress) {
   const url = `https://huggingface.co/${hfRepo}/resolve/main/${modelFile}`;
+
+  // Try Service Worker path first
+  const sw = navigator.serviceWorker?.controller;
+  if (sw) {
+    return downloadViaSW(sw, url, modelFile, onProgress);
+  }
+
+  // Fallback: direct fetch with in-memory Range retry
+  return downloadDirect(url, modelFile, onProgress);
+}
+
+// ── SW-delegated download via postMessage ──
+function downloadViaSW(sw, url, modelFile, onProgress) {
+  return new Promise((resolve, reject) => {
+    const handler = async (e) => {
+      const msg = e.data;
+      if (!msg) return;
+
+      switch (msg.type) {
+        case "download-progress":
+          if (onProgress) onProgress(msg.loaded, msg.total);
+          break;
+        case "download-retry":
+          if (onProgress) onProgress(-1, -1);
+          break;
+        case "download-complete":
+          navigator.serviceWorker.removeEventListener("message", handler);
+          // Retrieve blob from Cache API
+          try {
+            const cache = await caches.open(MEDIAPIPE_CACHE_NAME);
+            const resp = await cache.match(mediapipeCacheKey(modelFile));
+            if (resp) {
+              resolve(await resp.blob());
+            } else {
+              reject(new Error("Model cached by SW but not found in Cache API"));
+            }
+          } catch (err) {
+            reject(err);
+          }
+          break;
+        case "download-error":
+          navigator.serviceWorker.removeEventListener("message", handler);
+          const err = new Error(msg.error || "Download failed");
+          if (msg.httpStatus) err.httpStatus = msg.httpStatus;
+          reject(err);
+          break;
+      }
+    };
+
+    navigator.serviceWorker.addEventListener("message", handler);
+    sw.postMessage({ type: "download-model", url, modelFile });
+  });
+}
+
+// ── Direct fetch fallback (in-memory, Range retry) ──
+async function downloadDirect(url, modelFile, onProgress) {
   const MAX_RETRIES = 3;
   const BASE_DELAY_MS = 2000;
+  let offset = 0;
+  let chunks = [];
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      const resp = await fetch(url);
+      const headers = {};
+      if (offset > 0) {
+        headers["Range"] = `bytes=${offset}-`;
+      }
 
-      // Non-retryable HTTP errors (client errors like 403, 404)
-      if (!resp.ok && resp.status >= 400 && resp.status < 500) {
+      const resp = await fetch(url, { headers });
+
+      // Non-retryable HTTP errors
+      if (!resp.ok && resp.status !== 206 && resp.status >= 400 && resp.status < 500) {
         const err = new Error(`Download failed: ${resp.status} ${resp.statusText}`);
         err.httpStatus = resp.status;
         throw err;
       }
-      // Retryable HTTP errors (5xx server errors)
-      if (!resp.ok) {
+      if (!resp.ok && resp.status !== 206) {
         throw new Error(`Download failed: ${resp.status} ${resp.statusText}`);
       }
 
-      const contentLength = parseInt(resp.headers.get("content-length") || "0", 10);
+      // Determine total size
+      let totalSize = 0;
+      if (resp.status === 206) {
+        const range = resp.headers.get("content-range") || "";
+        const match = range.match(/\/\s*(\d+)/);
+        if (match) totalSize = parseInt(match[1], 10);
+      } else {
+        totalSize = parseInt(resp.headers.get("content-length") || "0", 10);
+        if (offset > 0) { chunks = []; offset = 0; }
+      }
+
       const reader = resp.body.getReader();
-      const chunks = [];
-      let loaded = 0;
+      let loaded = offset;
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
         chunks.push(value);
         loaded += value.length;
-        if (onProgress && contentLength > 0) {
-          onProgress(loaded, contentLength);
-        }
+        if (onProgress && totalSize > 0) onProgress(loaded, totalSize);
       }
 
       const blob = new Blob(chunks);
+      chunks = [];
 
+      // Cache for next time
       try {
         const cache = await caches.open(MEDIAPIPE_CACHE_NAME);
         await cache.put(mediapipeCacheKey(modelFile), new Response(blob.slice(0)));
-      } catch (e) { console.warn("MediaPipe cache store failed:", e); }
+      } catch (e) { console.warn("Cache store failed:", e); }
 
       return blob;
     } catch (err) {
-      // Don't retry client errors (403, 404, CORS blocks)
       if (err.httpStatus && err.httpStatus >= 400 && err.httpStatus < 500) throw err;
-
-      // Last attempt — give up
       if (attempt === MAX_RETRIES) throw err;
 
-      // Wait with exponential backoff before retrying
       const delay = BASE_DELAY_MS * Math.pow(2, attempt - 1);
       console.warn(`Download attempt ${attempt} failed, retrying in ${delay}ms...`, err.message);
-      if (onProgress) onProgress(-1, -1); // signal retry to UI
+      if (onProgress) onProgress(-1, -1);
       await new Promise(r => setTimeout(r, delay));
     }
   }

@@ -434,47 +434,184 @@ async function getMediaPipeCachedBlob(modelFile) {
   return null;
 }
 
+// ── Partial Download Persistence (IndexedDB) ──
+const PARTIAL_DB_NAME = "thinkhere-partials";
+const PARTIAL_DB_VERSION = 1;
+const PARTIAL_STORE = "chunks";
+const PARTIAL_META_STORE = "meta";
+const CHUNK_FLUSH_SIZE = 5 * 1024 * 1024; // flush to IDB every ~5 MB
+
+function openPartialDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(PARTIAL_DB_NAME, PARTIAL_DB_VERSION);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(PARTIAL_STORE)) {
+        db.createObjectStore(PARTIAL_STORE, { keyPath: "id", autoIncrement: true });
+      }
+      if (!db.objectStoreNames.contains(PARTIAL_META_STORE)) {
+        db.createObjectStore(PARTIAL_META_STORE, { keyPath: "file" });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function getPartialMeta(modelFile) {
+  try {
+    const db = await openPartialDB();
+    return await new Promise((resolve) => {
+      const tx = db.transaction(PARTIAL_META_STORE, "readonly");
+      const req = tx.objectStore(PARTIAL_META_STORE).get(modelFile);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => resolve(null);
+    });
+  } catch { return null; }
+}
+
+async function savePartialChunk(modelFile, chunk, newOffset, totalSize) {
+  const db = await openPartialDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction([PARTIAL_STORE, PARTIAL_META_STORE], "readwrite");
+    tx.objectStore(PARTIAL_STORE).add({ file: modelFile, data: chunk });
+    tx.objectStore(PARTIAL_META_STORE).put({ file: modelFile, offset: newOffset, totalSize });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function assemblePartialChunks(modelFile) {
+  const db = await openPartialDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(PARTIAL_STORE, "readonly");
+    const store = tx.objectStore(PARTIAL_STORE);
+    const chunks = [];
+    const req = store.openCursor();
+    req.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        if (cursor.value.file === modelFile) chunks.push(cursor.value.data);
+        cursor.continue();
+      } else {
+        resolve(new Blob(chunks));
+      }
+    };
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function clearPartialData(modelFile) {
+  try {
+    const db = await openPartialDB();
+    const tx = db.transaction([PARTIAL_STORE, PARTIAL_META_STORE], "readwrite");
+    // Clear matching chunks
+    const store = tx.objectStore(PARTIAL_STORE);
+    const req = store.openCursor();
+    req.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        if (cursor.value.file === modelFile) cursor.delete();
+        cursor.continue();
+      }
+    };
+    tx.objectStore(PARTIAL_META_STORE).delete(modelFile);
+  } catch (e) { console.warn("Failed to clear partial data:", e); }
+}
+
+// ── Resumable Model Download ──
 async function downloadMediaPipeModel(hfRepo, modelFile, onProgress) {
   const url = `https://huggingface.co/${hfRepo}/resolve/main/${modelFile}`;
   const MAX_RETRIES = 3;
   const BASE_DELAY_MS = 2000;
 
+  // Check for existing partial download
+  const partialMeta = await getPartialMeta(modelFile);
+  let offset = partialMeta ? partialMeta.offset : 0;
+  let totalSize = partialMeta ? partialMeta.totalSize : 0;
+
+  if (offset > 0 && onProgress) {
+    onProgress(offset, totalSize, true); // signal resume to UI
+  }
+
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      const resp = await fetch(url);
+      const headers = {};
+      if (offset > 0) {
+        headers["Range"] = `bytes=${offset}-`;
+      }
+
+      const resp = await fetch(url, { headers });
 
       // Non-retryable HTTP errors (client errors like 403, 404)
-      if (!resp.ok && resp.status >= 400 && resp.status < 500) {
+      if (!resp.ok && resp.status !== 206 && resp.status >= 400 && resp.status < 500) {
         const err = new Error(`Download failed: ${resp.status} ${resp.statusText}`);
         err.httpStatus = resp.status;
         throw err;
       }
-      // Retryable HTTP errors (5xx server errors)
-      if (!resp.ok) {
+      if (!resp.ok && resp.status !== 206) {
         throw new Error(`Download failed: ${resp.status} ${resp.statusText}`);
       }
 
-      const contentLength = parseInt(resp.headers.get("content-length") || "0", 10);
+      // Determine total size from response
+      if (resp.status === 206) {
+        // Partial content — parse Content-Range: bytes 0-999/5000
+        const range = resp.headers.get("content-range") || "";
+        const match = range.match(/\/\s*(\d+)/);
+        if (match) totalSize = parseInt(match[1], 10);
+      } else {
+        // Full response (server ignored Range, or first request)
+        totalSize = parseInt(resp.headers.get("content-length") || "0", 10);
+        if (offset > 0) {
+          // Server didn't support Range — restart from scratch
+          await clearPartialData(modelFile);
+          offset = 0;
+        }
+      }
+
       const reader = resp.body.getReader();
-      const chunks = [];
-      let loaded = 0;
+      let loaded = offset;
+      let pendingChunks = [];
+      let pendingSize = 0;
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        chunks.push(value);
+
+        pendingChunks.push(value);
+        pendingSize += value.length;
         loaded += value.length;
-        if (onProgress && contentLength > 0) {
-          onProgress(loaded, contentLength);
+
+        if (onProgress && totalSize > 0) {
+          onProgress(loaded, totalSize, false);
+        }
+
+        // Flush to IndexedDB periodically
+        if (pendingSize >= CHUNK_FLUSH_SIZE) {
+          const merged = new Blob(pendingChunks);
+          await savePartialChunk(modelFile, merged, loaded, totalSize);
+          pendingChunks = [];
+          pendingSize = 0;
         }
       }
 
-      const blob = new Blob(chunks);
+      // Flush remaining
+      if (pendingChunks.length > 0) {
+        const merged = new Blob(pendingChunks);
+        await savePartialChunk(modelFile, merged, loaded, totalSize);
+      }
 
+      // Assemble final blob from all chunks
+      const blob = await assemblePartialChunks(modelFile);
+
+      // Move to Cache API for fast loads next time
       try {
         const cache = await caches.open(MEDIAPIPE_CACHE_NAME);
         await cache.put(mediapipeCacheKey(modelFile), new Response(blob.slice(0)));
       } catch (e) { console.warn("MediaPipe cache store failed:", e); }
+
+      // Clean up partial data
+      await clearPartialData(modelFile);
 
       return blob;
     } catch (err) {
@@ -487,7 +624,7 @@ async function downloadMediaPipeModel(hfRepo, modelFile, onProgress) {
       // Wait with exponential backoff before retrying
       const delay = BASE_DELAY_MS * Math.pow(2, attempt - 1);
       console.warn(`Download attempt ${attempt} failed, retrying in ${delay}ms...`, err.message);
-      if (onProgress) onProgress(-1, -1); // signal retry to UI
+      if (onProgress) onProgress(-1, -1, false); // signal retry to UI
       await new Promise(r => setTimeout(r, delay));
     }
   }
@@ -636,11 +773,20 @@ window.loadModel = async function () {
       statSize.textContent = `${(blob.size / 1e9).toFixed(1)} GB (cached)`;
     } else {
       label.textContent = `Downloading ${MODEL.modelFile}...`;
-      blob = await downloadMediaPipeModel(MODEL.hfRepo, MODEL.modelFile, (loaded, total) => {
+      blob = await downloadMediaPipeModel(MODEL.hfRepo, MODEL.modelFile, (loaded, total, isResume) => {
         if (loaded === -1 && total === -1) {
           // Retry signal
           label.textContent = "Retrying download...";
           tip.textContent = "Connection interrupted — retrying automatically.";
+          return;
+        }
+        if (isResume) {
+          const resumePct = Math.round((loaded / total) * 100);
+          label.textContent = `Resuming download from ${resumePct}%...`;
+          bar.style.width = `${resumePct}%`;
+          statProgress.textContent = `${resumePct}%`;
+          statSize.textContent = `${(loaded / 1e9).toFixed(1)} / ${(total / 1e9).toFixed(1)} GB`;
+          tip.textContent = "Found partial download — resuming where you left off.";
           return;
         }
         const pct = Math.min(99, Math.round((loaded / total) * 100));

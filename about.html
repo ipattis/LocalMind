@@ -645,7 +645,8 @@
             </div>
             <p>Models are stored in the standard <strong>ONNX</strong> (Open Neural Network Exchange) format.
               <strong>ONNX Runtime Web</strong> interprets the model graph at load time and executes it on your GPU via
-              WebGPU, or falls back to WebAssembly on unsupported hardware.</p>
+              WebGPU, or falls back to WebAssembly on unsupported hardware.
+            </p>
             <div class="arch-label">Trade-offs</div>
             <ul>
               <li>Supports any model exportable to ONNX</li>
@@ -677,7 +678,8 @@
             </div>
             <p>Google's <strong>MediaPipe LLM Inference</strong> API loads Gemma models in the <strong>LiteRT</strong>
               format (formerly TFLite). Supports multimodal input — text and images — all processed on-device via
-              WebGPU.</p>
+              WebGPU. Available at <a href="https://app.thinkhere.ai"
+                style="color: var(--accent); text-decoration: none;">app.thinkhere.ai</a> with a free account.</p>
             <div class="arch-label">Trade-offs</div>
             <ul>
               <li>Multimodal: text and image input</li>
@@ -685,7 +687,7 @@
               <li>Requires WebGPU — no WASM fallback</li>
             </ul>
             <p class="arch-label">Used by</p>
-            <p>Gemma 3n E2B, Gemma 3n E4B</p>
+            <p>Gemma 3n E2B, Gemma 3n E4B (logged-in tier)</p>
           </div>
         </div>
         <div class="arch-shared">All three methods use WebGPU for GPU acceleration. All model weights are cached in your

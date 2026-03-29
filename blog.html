@@ -419,7 +419,7 @@
         <h2><a href="#post-launch">Introducing ThinkHere &mdash; Private AI That Runs in Your Browser</a></h2>
         <p class="post-excerpt">We built an AI assistant that runs entirely on your hardware. No cloud servers, no data
           collection, no API keys. Here is why we think local-first AI matters, and how we made it work with WebGPU and
-          MediaPipe.</p>
+          WebLLM.</p>
         <a class="read-more" href="#post-launch">Read more &rarr;</a>
       </article>
 
@@ -462,15 +462,15 @@
             which was designed for graphics rendering, WebGPU is built for general-purpose compute workloads, including
             the matrix multiplications that power neural network inference. Chrome, Edge, and Safari all ship with
             WebGPU support.</li>
-          <li><strong>MediaPipe LLM Inference API</strong> is Google's framework for running large language models on
-            edge devices. It handles model loading, tokenization, context management, and inference scheduling.
-            ThinkHere uses MediaPipe to orchestrate the entire pipeline inside the browser.</li>
+          <li><strong>WebLLM</strong> is an open-source framework for running large language models in the browser.
+            It handles model loading, tokenization, context management, and inference scheduling.
+            ThinkHere uses WebLLM to orchestrate the entire pipeline inside the browser.</li>
         </ul>
 
         <p>When you first load a model in ThinkHere, the browser downloads the model weights (typically 1 to 3 GB
           depending on the model). These weights are stored in the browser's Cache Storage API, so you only download
           them once. On subsequent visits, the model loads from the local cache in a matter of seconds. From there,
-          MediaPipe compiles the model for your specific GPU using WebGPU shader compilation, and inference runs
+          WebLLM compiles the model for your specific GPU using WebGPU shader compilation, and inference runs
           natively on your hardware.</p>
 
         <div class="highlight">
@@ -488,9 +488,9 @@
           work:</p>
 
         <ul>
-          <li><strong>Free (no account required):</strong> You can load and chat with Gemma 3n E2B immediately, with no
-            sign-up. This is a capable, multimodal model that supports image input. You get a clean chat interface with
-            file and PDF upload as context, no strings attached.</li>
+          <li><strong>Free (no account required):</strong> You can load and chat with SmolLM2 1.7B immediately, with no
+            sign-up. This is a fast, lightweight chat model. You get a clean chat interface with
+            file upload as context, no strings attached.</li>
           <li><strong>Logged in (free account):</strong> Creating a free account unlocks the full model library (ten
             models and growing), conversation history and saving, conversation export, and context compression for long
             chats. The account is free and always will be.</li>
@@ -508,7 +508,7 @@
 
         <ul>
           <li><strong>Browser:</strong> Chrome 113+, Edge 113+, or Safari 18+ with WebGPU enabled</li>
-          <li><strong>RAM:</strong> At least 6 GB for the smallest model (Gemma 3n E2B). Larger models need more.</li>
+          <li><strong>RAM:</strong> At least 4 GB for the smallest model (SmolLM2 1.7B). Larger models need more.</li>
           <li><strong>Best experience:</strong> Desktop or laptop with a dedicated or integrated GPU</li>
           <li><strong>iPhone:</strong> Not currently supported due to iOS memory limits that prevent model loading</li>
           <li><strong>iPad:</strong> M-series iPads may work, though the experience varies</li>

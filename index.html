@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ThinkHere — Private AI in Your Browser</title>
   <meta name="description"
-    content="Run AI entirely in your browser. No servers, no API keys, no data leaves your device. Powered by Gemma 3n and WebGPU.">
+    content="Run AI entirely in your browser. No servers, no API keys, no data leaves your device. Powered by SmolLM2 and WebGPU.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
@@ -164,8 +164,8 @@
           <div id="deviceInfoBar"></div>
           <div id="deviceBanners"></div>
 
-          <button class="start-btn" id="startBtn" onclick="loadModel()">Load Gemma 3n E2B &amp; Start Chatting</button>
-          <p style="font-size: 0.75rem; color: var(--text-dim); max-width: 400px;">First load downloads ~3 GB of model
+          <button class="start-btn" id="startBtn" onclick="loadModel()">Load SmolLM2 1.7B &amp; Start Chatting</button>
+          <p style="font-size: 0.75rem; color: var(--text-dim); max-width: 400px;">First load downloads ~1 GB of model
             weights. After that, the model loads from cache in seconds.</p>
 
           <div class="pillar-row">
@@ -214,7 +214,7 @@
         <!-- Loading Screen -->
         <div class="loading-screen" id="loadingScreen">
           <div class="loader-ring"></div>
-          <div class="loading-model-name" id="loadingModelName">Gemma 3n E2B</div>
+          <div class="loading-model-name" id="loadingModelName">SmolLM2 1.7B</div>
           <div class="loading-label" id="loadingLabel">Initializing engine...</div>
           <div class="progress-bar-container">
             <div class="progress-bar" id="progressBar"></div>
@@ -252,17 +252,7 @@
                     d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5a2.5 2.5 0 015 0v10.5c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5V6H9v9.5a3 3 0 006 0V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z" />
                 </svg>
               </button>
-              <div class="multimodal-btns" id="multimodalBtns">
-                <button class="mm-btn" id="mmImageBtn" onclick="document.getElementById('mmImageInput').click()"
-                  title="Attach image">
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
-                  </svg>
-                </button>
-              </div>
-              <input type="file" id="mmImageInput" style="display:none" accept="image/*"
-                onchange="handleImageUpload(this)">
+
               <input type="file" id="fileInput" style="display:none"
                 accept=".txt,.md,.json,.js,.ts,.py,.html,.css,.csv,.xml,.yaml,.yml,.toml,.sh,.rb,.go,.rs,.c,.cpp,.h,.java,.kt,.swift"
                 onchange="handleFileUpload(this)">

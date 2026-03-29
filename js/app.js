@@ -1,29 +1,21 @@
-// ── ThinkHere — Free Tier: MediaPipe-only Chat ──
+// ── ThinkHere — Free Tier: WebLLM Chat ──
 
-import { FilesetResolver, LlmInference } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-genai/genai_bundle.mjs";
+import * as webllm from "https://esm.run/@mlc-ai/web-llm";
 import { marked } from "https://esm.run/marked";
-
-const MEDIAPIPE_WASM_PATH = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-genai/wasm";
-const MEDIAPIPE_CACHE_NAME = "thinkhere-mediapipe-models";
 
 // ── The single model for the free tier ──
 const MODEL = {
-  id: "gemma-3n-E2B",
-  name: "Gemma 3n E2B",
-  desc: "Google's multimodal model. Text & image input.",
-  tech: "MediaPipe LLM · LiteRT · WebGPU · int4",
-  size: "~3 GB",
-  sizeMB: 3000,
-  time: "~3 – 6 min",
-  multimodal: true,
-  supportsSystemPrompt: true,
-  modelFile: "gemma-3n-E2B-it-int4-Web.litertlm",
-  hfRepo: "Volko76/gemma-3n-E2B-it-litert-lm",
-  minRAM_GB: 6,
+  id: "SmolLM2-1.7B-Instruct-q4f16_1-MLC",
+  name: "SmolLM2 1.7B",
+  desc: "Fast, lightweight chat model.",
+  tech: "WebLLM · MLC · WebGPU",
+  size: "~1 GB",
+  sizeMB: 1000,
+  time: "~1 – 3 min",
+  minRAM_GB: 4,
 };
 
-let mpInference = null;
-let pendingAttachments = [];
+let webllmEngine = null;
 let pendingFiles = [];
 let isGenerating = false;
 let shouldStop = false;
@@ -197,28 +189,21 @@ window.switchConversation = async function (id) {
 };
 
 async function generateConversationLabel(convId) {
-  if (!mpInference) return;
+  if (!webllmEngine) return;
   const conv = await loadConversation(convId);
   if (!conv) return;
   const firstUserMsg = conv.messages.find(m => m.role === "user");
   const firstAssistantMsg = conv.messages.find(m => m.role === "assistant");
   if (!firstUserMsg) return;
 
-  const summaryPrompt = formatGemmaPrompt([
-    { role: "user", content: `Summarize this conversation in 4-6 words as a short label. Only output the label, nothing else.\n\nUser: ${firstUserMsg.content}\n${firstAssistantMsg ? `Assistant: ${firstAssistantMsg.content.slice(0, 200)}` : ""}` },
-  ]);
-
   try {
-    let label = "";
-    await new Promise((resolve, reject) => {
-      try {
-        mpInference.generateResponse(summaryPrompt, (chunk, done) => {
-          label += chunk;
-          if (done) resolve();
-        });
-      } catch (err) { reject(err); }
+    const result = await webllmEngine.chat.completions.create({
+      messages: [{ role: "user", content: `Summarize this conversation in 4-6 words as a short label. Only output the label, nothing else.\n\nUser: ${firstUserMsg.content}\n${firstAssistantMsg ? `Assistant: ${firstAssistantMsg.content.slice(0, 200)}` : ""}` }],
+      temperature: 0.3,
+      max_tokens: 60,
+      stream: false,
     });
-
+    let label = result.choices[0].message.content.trim();
     label = label.replace(/[*_#"`]/g, "").trim();
     if (label.length > 0 && label.length < 60) {
       await updateConversationTitle(convId, label);
@@ -326,13 +311,13 @@ async function checkWebGPU() {
   if (bp.name === "Firefox") {
     container.innerHTML = `<div class="browser-version-warning">
       <strong>Firefox detected</strong> (v${bp.version})<br>
-      WebGPU is not yet enabled by default in Firefox. MediaPipe models require WebGPU.<br>
+      WebGPU is not yet enabled by default in Firefox. On-device AI models require WebGPU.<br>
       For GPU-accelerated AI, use <code>Chrome 113+</code> or <code>Edge 113+</code>.
     </div>`;
   } else if (bp.name === "Safari" && bp.version < 18) {
     container.innerHTML = `<div class="browser-version-warning">
       <strong>Safari ${bp.version} detected</strong><br>
-      WebGPU requires Safari 18+. MediaPipe models require WebGPU.<br>
+      WebGPU requires Safari 18+. On-device AI models require WebGPU.<br>
       For best results, update Safari or use <code>Chrome 113+</code>.
     </div>`;
   } else if ((bp.name === "Chrome" || bp.name === "Edge") && bp.version < 113) {
@@ -420,175 +405,6 @@ function showIPhoneBanner() {
   container.appendChild(banner);
 }
 
-// ── MediaPipe Cache Helpers ──
-function mediapipeCacheKey(modelFile) {
-  return `https://thinkhere.local/mediapipe/${modelFile}`;
-}
-
-async function getMediaPipeCachedBlob(modelFile) {
-  try {
-    const cache = await caches.open(MEDIAPIPE_CACHE_NAME);
-    const resp = await cache.match(mediapipeCacheKey(modelFile));
-    if (resp) return await resp.blob();
-  } catch (e) { console.warn("MediaPipe cache check failed:", e); }
-  return null;
-}
-
-// ── Service Worker Registration ──
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js").then((reg) => {
-    console.log("SW registered:", reg.scope);
-  }).catch((err) => {
-    console.warn("SW registration failed:", err);
-  });
-}
-
-// ── Download Model (SW-delegated with direct-fetch fallback) ──
-async function downloadMediaPipeModel(hfRepo, modelFile, onProgress) {
-  const url = `https://huggingface.co/${hfRepo}/resolve/main/${modelFile}`;
-
-  // Try Service Worker path first
-  const sw = navigator.serviceWorker?.controller;
-  if (sw) {
-    return downloadViaSW(sw, url, modelFile, onProgress);
-  }
-
-  // Fallback: direct fetch with in-memory Range retry
-  return downloadDirect(url, modelFile, onProgress);
-}
-
-// ── SW-delegated download via postMessage ──
-function downloadViaSW(sw, url, modelFile, onProgress) {
-  return new Promise((resolve, reject) => {
-    const handler = async (e) => {
-      const msg = e.data;
-      if (!msg) return;
-
-      switch (msg.type) {
-        case "download-progress":
-          if (onProgress) onProgress(msg.loaded, msg.total);
-          break;
-        case "download-retry":
-          if (onProgress) onProgress(-1, -1);
-          break;
-        case "download-complete":
-          navigator.serviceWorker.removeEventListener("message", handler);
-          // Retrieve blob from Cache API
-          try {
-            const cache = await caches.open(MEDIAPIPE_CACHE_NAME);
-            const resp = await cache.match(mediapipeCacheKey(modelFile));
-            if (resp) {
-              resolve(await resp.blob());
-            } else {
-              // SW couldn't cache (quota exceeded) — fall back to direct download
-              console.warn("SW download complete but cache miss — falling back to direct download");
-              resolve(await downloadDirect(url, modelFile, onProgress));
-            }
-          } catch (err) {
-            reject(err);
-          }
-          break;
-        case "download-error":
-          navigator.serviceWorker.removeEventListener("message", handler);
-          const err = new Error(msg.error || "Download failed");
-          if (msg.httpStatus) err.httpStatus = msg.httpStatus;
-          reject(err);
-          break;
-      }
-    };
-
-    navigator.serviceWorker.addEventListener("message", handler);
-    sw.postMessage({ type: "download-model", url, modelFile });
-  });
-}
-
-// ── Direct fetch fallback (in-memory, Range retry) ──
-async function downloadDirect(url, modelFile, onProgress) {
-  const MAX_RETRIES = 3;
-  const BASE_DELAY_MS = 2000;
-  let offset = 0;
-  let chunks = [];
-
-  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    try {
-      const headers = {};
-      if (offset > 0) {
-        headers["Range"] = `bytes=${offset}-`;
-      }
-
-      const resp = await fetch(url, { headers });
-
-      // Non-retryable HTTP errors
-      if (!resp.ok && resp.status !== 206 && resp.status >= 400 && resp.status < 500) {
-        const err = new Error(`Download failed: ${resp.status} ${resp.statusText}`);
-        err.httpStatus = resp.status;
-        throw err;
-      }
-      if (!resp.ok && resp.status !== 206) {
-        throw new Error(`Download failed: ${resp.status} ${resp.statusText}`);
-      }
-
-      // Determine total size
-      let totalSize = 0;
-      if (resp.status === 206) {
-        const range = resp.headers.get("content-range") || "";
-        const match = range.match(/\/\s*(\d+)/);
-        if (match) totalSize = parseInt(match[1], 10);
-      } else {
-        totalSize = parseInt(resp.headers.get("content-length") || "0", 10);
-        if (offset > 0) { chunks = []; offset = 0; }
-      }
-
-      const reader = resp.body.getReader();
-      let loaded = offset;
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        chunks.push(value);
-        loaded += value.length;
-        if (onProgress && totalSize > 0) onProgress(loaded, totalSize);
-      }
-
-      const blob = new Blob(chunks);
-      chunks = [];
-
-      // Cache for next time
-      try {
-        const cache = await caches.open(MEDIAPIPE_CACHE_NAME);
-        await cache.put(mediapipeCacheKey(modelFile), new Response(blob.slice(0)));
-      } catch (e) { console.warn("Cache store failed:", e); }
-
-      return blob;
-    } catch (err) {
-      if (err.httpStatus && err.httpStatus >= 400 && err.httpStatus < 500) throw err;
-      if (attempt === MAX_RETRIES) throw err;
-
-      const delay = BASE_DELAY_MS * Math.pow(2, attempt - 1);
-      console.warn(`Download attempt ${attempt} failed, retrying in ${delay}ms...`, err.message);
-      if (onProgress) onProgress(-1, -1);
-      await new Promise(r => setTimeout(r, delay));
-    }
-  }
-}
-
-// ── Gemma Prompt Formatter ──
-function formatGemmaPrompt(messages) {
-  let prompt = "";
-  for (const msg of messages) {
-    if (msg.role === "system") {
-      prompt += `<start_of_turn>user\n${msg.content}<end_of_turn>\n`;
-      prompt += `<start_of_turn>model\nUnderstood.<end_of_turn>\n`;
-    } else if (msg.role === "user") {
-      prompt += `<start_of_turn>user\n${msg.content}<end_of_turn>\n`;
-    } else if (msg.role === "assistant") {
-      prompt += `<start_of_turn>model\n${msg.content}<end_of_turn>\n`;
-    }
-  }
-  prompt += `<start_of_turn>model\n`;
-  return prompt;
-}
-
 // ── Token Count ──
 function estimateTokens(text) {
   return Math.ceil(text.length / 4);
@@ -626,20 +442,9 @@ window.loadModel = async function () {
     return;
   }
 
-  // Check storage
-  const cachedBlob = await getMediaPipeCachedBlob(MODEL.modelFile);
-  if (!cachedBlob) {
-    const storage = await checkStorageAvailability();
-    const neededMB = MODEL.sizeMB * 1.2;
-    if (storage && storage.availableMB < neededMB) {
-      const neededLabel = `${(neededMB / 1000).toFixed(1)} GB`;
-      const availLabel = storage.availableMB >= 1000 ? `${(storage.availableMB / 1000).toFixed(1)} GB` : `${storage.availableMB} MB`;
-      if (!confirm(`Gemma 3n E2B needs ~${neededLabel} of free storage, but you have ~${availLabel} available.\n\nTry downloading anyway?`)) return;
-    }
-
-    if (deviceProfile && !deviceProfile.ramCapped && deviceProfile.deviceRAM_GB < MODEL.minRAM_GB) {
-      if (!confirm(`Gemma 3n E2B needs ~${MODEL.minRAM_GB} GB RAM, but your device has ~${deviceProfile.deviceRAM_GB} GB.\n\nTry loading anyway?`)) return;
-    }
+  // RAM check
+  if (deviceProfile && !deviceProfile.ramCapped && deviceProfile.deviceRAM_GB < MODEL.minRAM_GB) {
+    if (!confirm(`${MODEL.name} needs ~${MODEL.minRAM_GB} GB RAM, but your device has ~${deviceProfile.deviceRAM_GB} GB.\n\nTry loading anyway?`)) return;
   }
 
   // Hide intro, show loading screen
@@ -677,11 +482,11 @@ window.loadModel = async function () {
 
   // Tips
   const tips = [
-    "Downloading LiteRT model weights — this only happens once, then it's cached locally.",
-    "Gemma 3n supports text and image input in one model.",
+    "Downloading model weights — this only happens once, then it's cached locally.",
+    "SmolLM2 is a fast, lightweight chat model optimized for on-device use.",
     "All data stays on your device. Nothing is sent to any server.",
     "After caching, this model will load in just a few seconds next time.",
-    "MediaPipe uses WebGPU for fast on-device inference.",
+    "WebLLM uses WebGPU for fast on-device inference.",
   ];
   let tipIdx = 0;
   const tipInterval = setInterval(() => {
@@ -704,85 +509,21 @@ window.loadModel = async function () {
 
   setPhase("download");
 
-  let downloadSucceeded = false;
-
   try {
-    label.textContent = "Checking cache...";
+    webllmEngine = new webllm.MLCEngine();
 
-    let blob = cachedBlob;
-    if (blob) {
-      label.textContent = "Loading from cache...";
-      bar.style.width = "100%";
-      statProgress.textContent = "100%";
-      statSize.textContent = `${(blob.size / 1e9).toFixed(1)} GB (cached)`;
-    } else {
-      label.textContent = `Downloading ${MODEL.modelFile}...`;
-      blob = await downloadMediaPipeModel(MODEL.hfRepo, MODEL.modelFile, (loaded, total) => {
-        if (loaded === -1 && total === -1) {
-          // Retry signal
-          label.textContent = "Retrying download...";
-          tip.textContent = "Connection interrupted — retrying automatically.";
-          return;
-        }
-        const pct = Math.min(99, Math.round((loaded / total) * 100));
-        bar.style.width = `${pct}%`;
-        statProgress.textContent = `${pct}%`;
-        label.textContent = `Downloading model... ${pct}%`;
-        statSize.textContent = `${(loaded / 1e9).toFixed(1)} / ${(total / 1e9).toFixed(1)} GB`;
-      });
-      bar.style.width = "100%";
-      statProgress.textContent = "100%";
-    }
+    webllmEngine.setInitProgressCallback((report) => {
+      const pct = Math.round(report.progress * 100);
+      bar.style.width = `${pct}%`;
+      statProgress.textContent = `${pct}%`;
+      label.textContent = report.text;
 
-    downloadSucceeded = true;
+      // Phase transitions based on progress text
+      if (report.text.includes("Loading model")) setPhase("download");
+      if (report.text.includes("Compiling")) setPhase("compile");
+    });
 
-    // Compile phase
-    setPhase("compile");
-    label.textContent = "Initializing MediaPipe LLM engine...";
-    tip.textContent = "Creating inference session — this may take a moment.";
-
-    // Show memory requirements
-    const memInfo = document.getElementById("memoryInfo");
-    if (memInfo) {
-      const modelGB = (MODEL.sizeMB / 1000).toFixed(1);
-      const neededGB = (MODEL.sizeMB * 2 / 1000).toFixed(1);
-      const ramGB = deviceProfile ? deviceProfile.deviceRAM_GB : "unknown";
-      memInfo.innerHTML = `<span class="mem-label">Memory needed:</span> ~${neededGB} GB (${modelGB} GB model + inference engine)` +
-        (ramGB !== "unknown" ? ` · <span class="mem-label">Device RAM:</span> ~${ramGB} GB` : "");
-      memInfo.style.display = "block";
-    }
-
-    // Prefer SW-served cache URL to avoid double-memory from blob URLs.
-    // The SW intercepts fetches to thinkhere.local/mediapipe/* and serves
-    // directly from Cache API — zero-copy, no blob intermediary.
-    const sw = navigator.serviceWorker?.controller;
-    let modelAssetPath;
-    let blobUrl = null;
-
-    if (sw) {
-      // SW will serve from cache — drop the blob to free memory
-      blob = null;
-      modelAssetPath = mediapipeCacheKey(MODEL.modelFile);
-    } else {
-      // No SW available — fall back to blob URL
-      blobUrl = URL.createObjectURL(blob);
-      blob = null;
-      modelAssetPath = blobUrl;
-    }
-
-    try {
-      const genai = await FilesetResolver.forGenAiTasks(MEDIAPIPE_WASM_PATH);
-      mpInference = await LlmInference.createFromOptions(genai, {
-        baseOptions: { modelAssetPath },
-        maxTokens: 4096,
-        topK: 40,
-        temperature: 0.7,
-        randomSeed: Math.floor(Math.random() * 1e9),
-        maxNumImages: 4,
-      });
-    } finally {
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
-    }
+    await webllmEngine.reload(MODEL.id);
 
     // Done
     clearInterval(timerInterval);
@@ -802,9 +543,6 @@ window.loadModel = async function () {
     document.getElementById("headerStatus").textContent = MODEL.name;
     document.getElementById("sendBtn").disabled = false;
     document.getElementById("userInput").focus();
-
-    // Enable multimodal UI
-    document.getElementById("multimodalBtns").classList.add("active");
     updateTokenCount();
 
   } catch (err) {
@@ -815,10 +553,8 @@ window.loadModel = async function () {
 
     const msg = (err.message || "").toLowerCase();
 
-    // Only classify as network/blocked if the download itself failed
-    const isDownloadError = !downloadSucceeded;
-    const isBlocked = isDownloadError && (msg.includes("403") || msg.includes("cors"));
-    const isNetworkError = isDownloadError && (msg.includes("failed to fetch") || msg.includes("network") || msg.includes("blocked") || msg.includes("timeout") || msg.includes("abort"));
+    const isBlocked = msg.includes("403") || msg.includes("cors");
+    const isNetworkError = msg.includes("failed to fetch") || msg.includes("network") || msg.includes("blocked") || msg.includes("timeout") || msg.includes("abort");
 
     tip.textContent = "";
     const errorDiv = document.createElement("div");
@@ -845,7 +581,7 @@ window.loadModel = async function () {
       label.textContent = "Download interrupted";
       errorDiv.innerHTML = `
         <strong>Download didn't complete</strong>
-        The model is ~3 GB and the download was interrupted. This can happen on slower or unstable connections.
+        The model is ~1 GB and the download was interrupted. This can happen on slower or unstable connections.
         <br><br>
         <strong>Things to try:</strong>
         <ul>
@@ -904,23 +640,22 @@ window.freeMemoryAndRetry = async function () {
   if (loadScreen) loadScreen.querySelectorAll(".network-error").forEach(el => el.remove());
 
   // Release inference engine
-  if (mpInference) {
-    try { mpInference.close?.(); } catch (e) { /* ignore */ }
-    mpInference = null;
+  if (webllmEngine) {
+    try { await webllmEngine.unload(); } catch (e) { /* ignore */ }
+    webllmEngine = null;
   }
 
-  // Clear model cache
+  // Clear WebLLM / MLC caches
   try {
-    await caches.delete(MEDIAPIPE_CACHE_NAME);
+    const cacheNames = await caches.keys();
+    for (const name of cacheNames) {
+      if (name.includes("webllm") || name.includes("mlc")) {
+        await caches.delete(name);
+      }
+    }
     console.log("Model cache cleared.");
   } catch (e) {
     console.warn("Failed to clear cache:", e);
-  }
-
-  // Ask SW to clear its cache too
-  const sw = navigator.serviceWorker?.controller;
-  if (sw) {
-    sw.postMessage({ type: "clear-storage" });
   }
 
   // Brief pause to let GC reclaim
@@ -935,7 +670,7 @@ window.freeMemoryAndRetry = async function () {
 window.sendMessage = async function () {
   const input = document.getElementById("userInput");
   const text = input.value.trim();
-  if (!text || isGenerating || !mpInference) return;
+  if (!text || isGenerating || !webllmEngine) return;
 
   // Start a new conversation if none active
   if (!currentConvId) {
@@ -943,17 +678,6 @@ window.sendMessage = async function () {
   }
 
   const userBubble = appendMessage("user", text);
-
-  // Show attached images in user bubble
-  if (pendingAttachments.length > 0) {
-    for (const att of pendingAttachments) {
-      const img = document.createElement("img");
-      img.src = att.data;
-      img.className = "message-image";
-      img.alt = att.name;
-      userBubble.appendChild(img);
-    }
-  }
 
   // Show attached files summary
   if (pendingFiles.length > 0) {
@@ -981,7 +705,6 @@ window.sendMessage = async function () {
   document.getElementById("tokenInfo").textContent = "Generating...";
 
   const messages = [...chatHistory];
-  const prompt = formatGemmaPrompt(messages);
 
   // Create assistant bubble for streaming
   const bubble = appendMessage("assistant", "");
@@ -990,44 +713,23 @@ window.sendMessage = async function () {
   let tokenCount = 0;
 
   try {
-    const stopPromise = new Promise(resolve => { stopResolve = resolve; });
-    let stopped = false;
-
-    // Build multimodal input if attachments present
-    let mpInput = prompt;
-    if (pendingAttachments.length > 0) {
-      const parts = [];
-      for (const att of pendingAttachments) {
-        const img = new Image();
-        img.src = att.data;
-        await new Promise(r => { img.onload = r; });
-        parts.push({ imageSource: img });
-      }
-      parts.push(prompt);
-      mpInput = parts;
-    }
-
-    const genPromise = new Promise((resolve, reject) => {
-      try {
-        mpInference.generateResponse(mpInput, (chunk, done) => {
-          if (stopped || shouldStop) return;
-          fullResponse += chunk;
-          tokenCount++;
-          renderStreamingMarkdown(bubble, fullResponse);
-          scrollToBottom();
-          if (done) resolve();
-        });
-      } catch (err) {
-        reject(err);
-      }
+    const completion = await webllmEngine.chat.completions.create({
+      messages,
+      temperature: 0.7,
+      max_tokens: 2048,
+      stream: true,
     });
 
-    await Promise.race([genPromise, stopPromise]);
-    stopped = true;
-    stopResolve = null;
+    for await (const chunk of completion) {
+      if (shouldStop) break;
+      const delta = chunk.choices[0]?.delta?.content || "";
+      fullResponse += delta;
+      tokenCount++;
+      renderStreamingMarkdown(bubble, fullResponse);
+      scrollToBottom();
+    }
 
     chatHistory.push({ role: "assistant", content: fullResponse });
-    pendingAttachments = [];
     pendingFiles = [];
 
     // Save to IndexedDB and generate label after first exchange
@@ -1060,9 +762,7 @@ window.sendMessage = async function () {
 
   isGenerating = false;
   shouldStop = false;
-  pendingAttachments = [];
   pendingFiles = [];
-  updateAttachmentPreview();
   updateFilePreview();
   hideStopButton();
   document.getElementById("sendBtn").disabled = false;
@@ -1095,58 +795,6 @@ window.newChat = async function () {
   await renderConversationList();
   updateTokenCount();
 };
-
-// ── Multimodal: Image Upload ──
-window.handleImageUpload = function (input) {
-  const file = input.files[0];
-  if (!file) return;
-  input.value = "";
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    pendingAttachments.push({ type: "image", data: e.target.result, name: file.name });
-    updateAttachmentPreview();
-  };
-  reader.readAsDataURL(file);
-};
-
-function updateAttachmentPreview() {
-  const container = document.getElementById("attachmentPreview");
-  if (pendingAttachments.length === 0) {
-    container.classList.remove("active");
-    container.innerHTML = "";
-    return;
-  }
-  container.classList.add("active");
-  container.innerHTML = pendingAttachments.map((a, i) => {
-    return `<div class="attachment-thumb">
-      <img src="${a.data}" alt="${a.name}">
-      <span>${a.name}</span>
-      <button class="remove-attach" onclick="removeAttachment(${i})">×</button>
-    </div>`;
-  }).join("");
-}
-
-window.removeAttachment = function (idx) {
-  pendingAttachments.splice(idx, 1);
-  updateAttachmentPreview();
-};
-
-// ── Paste handler for images ──
-document.addEventListener("paste", (e) => {
-  if (!mpInference) return;
-  const items = Array.from(e.clipboardData?.items || []);
-  const imageItem = items.find(i => i.type.startsWith("image/"));
-  if (imageItem) {
-    e.preventDefault();
-    const file = imageItem.getAsFile();
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      pendingAttachments.push({ type: "image", data: ev.target.result, name: file.name || "pasted-image.png" });
-      updateAttachmentPreview();
-    };
-    reader.readAsDataURL(file);
-  }
-});
 
 // ── File Upload as Context ──
 window.handleFileUpload = function (input) {
@@ -1193,24 +841,15 @@ window.removeFile = function (idx) {
 document.addEventListener("dragover", (e) => { e.preventDefault(); });
 document.addEventListener("drop", (e) => {
   e.preventDefault();
-  if (!mpInference) return;
+  if (!webllmEngine) return;
   const files = Array.from(e.dataTransfer?.files || []);
   for (const file of files) {
-    if (file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        pendingAttachments.push({ type: "image", data: ev.target.result, name: file.name });
-        updateAttachmentPreview();
-      };
-      reader.readAsDataURL(file);
-    } else {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        pendingFiles.push({ name: file.name, content: ev.target.result, size: file.size });
-        updateFilePreview();
-      };
-      reader.readAsText(file);
-    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      pendingFiles.push({ name: file.name, content: ev.target.result, size: file.size });
+      updateFilePreview();
+    };
+    reader.readAsText(file);
   }
 });
 

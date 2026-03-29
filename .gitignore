@@ -12,5 +12,8 @@ Thumbs.db
 # Brand assets (reference only)
 qanata_brand/
 
+# Terms pages (managed separately)
+thinkhere terms/
+
 # Node (if ever added)
 node_modules/

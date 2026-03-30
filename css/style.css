@@ -1541,6 +1541,34 @@ a.logo-product:hover {
 }
 
 /* ── Legal footer ── */
+.footer-trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.trust-badge svg {
+  opacity: 0.6;
+}
+
+.trust-sep {
+  color: var(--text-dim);
+  font-size: 14px;
+}
+
 .legal {
   text-align: center;
   font-size: 11.5px;

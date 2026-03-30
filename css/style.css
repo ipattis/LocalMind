@@ -1547,26 +1547,37 @@ a.logo-product:hover {
   justify-content: center;
   gap: 6px;
   padding: 10px 20px 0;
+  flex-wrap: wrap;
+}
+
+.trust-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
 
-.trust-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
+.trust-pill svg {
+  width: 13px;
+  height: 13px;
+  stroke: var(--terra);
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
 }
 
-.trust-badge svg {
-  opacity: 0.6;
-}
-
-.trust-sep {
-  color: var(--text-dim);
-  font-size: 14px;
+.trust-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  opacity: 0.35;
 }
 
 .legal {

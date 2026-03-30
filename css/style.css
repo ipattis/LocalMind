@@ -236,7 +236,7 @@ a.logo-product:hover {
   border-top: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 10px;
   flex-shrink: 0;
 }
 
@@ -244,15 +244,35 @@ a.logo-product:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
+  padding: 0 4px;
 }
 
 .sidebar-gh-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-right: 0;
+}
+
+.sidebar-gh-stats .gh-stat {
+  font-size: 0.72rem;
+  gap: 5px;
+}
+
+.sidebar-gh-stats .gh-stat svg {
+  width: 14px;
+  height: 14px;
+}
+
+.sidebar-gh-stats .github-link svg {
+  width: 19px;
+  height: 19px;
 }
 
 .sidebar-theme-toggle {
   margin-right: 0;
+  flex-shrink: 0;
 }
 
 .footer-note {

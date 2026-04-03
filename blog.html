@@ -467,7 +467,7 @@
             ThinkHere uses WebLLM to orchestrate the entire pipeline inside the browser.</li>
         </ul>
 
-        <p>When you first load a model in ThinkHere, the browser downloads the model weights (typically 1 to 3 GB
+        <p>When you first load a model in ThinkHere, the browser downloads the model weights (typically 600 MB to 4.5 GB
           depending on the model). These weights are stored in the browser's Cache Storage API, so you only download
           them once. On subsequent visits, the model loads from the local cache in a matter of seconds. From there,
           WebLLM compiles the model for your specific GPU using WebGPU shader compilation, and inference runs

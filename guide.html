@@ -323,7 +323,7 @@
         </div>
 
 
-                <section class="doc-section" id="quick-start">
+        <section class="doc-section" id="quick-start">
           <h2>Getting Started</h2>
           <p>ThinkHere runs entirely in your browser. There is nothing to install and no account is required to start
             chatting.</p>
@@ -545,7 +545,7 @@
             more RAM and generate tokens more slowly. Models marked as multi-modal support image and PDF input alongside
             text.</p>
 
-          <h3>Supporting models</h3>
+          <h3 style="margin: 36px 0 16px;">Supporting models</h3>
           <p>ThinkHere also uses the following models behind the scenes for Pro features. All run entirely on-device via
             WebGPU &mdash; no data is sent to any server.</p>
 
@@ -612,7 +612,7 @@
           </div>
         </section>
 
-<section class="doc-section" id="getting-started">
+        <section class="doc-section" id="getting-started">
           <h2 class="section-title">Getting Started</h2>
 
           <article class="article" id="what-is-thinkhere">
@@ -1145,40 +1145,40 @@
               supported:</p>
             <div class="models-table-wrap">
               <table class="models-table">
-              <thead>
-                <tr>
-                  <th>Browser</th>
-                  <th>Minimum version</th>
-                  <th>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Google Chrome</td>
-                  <td>113+</td>
-                  <td>Recommended — best WebGPU support</td>
-                </tr>
-                <tr>
-                  <td>Microsoft Edge</td>
-                  <td>113+</td>
-                  <td>Chromium-based; performs similarly to Chrome</td>
-                </tr>
-                <tr>
-                  <td>Apple Safari</td>
-                  <td>18+</td>
-                  <td>Supported on macOS and iPadOS (M-series)</td>
-                </tr>
-                <tr>
-                  <td>Mozilla Firefox</td>
-                  <td>—</td>
-                  <td>Not currently supported; WebGPU is not stable in Firefox</td>
-                </tr>
-              </tbody>
-            </table>
-            <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">If
-              your browser is not listed or is below the minimum version, ThinkHere will display an error
-              on load. Updating your browser to the latest version is the simplest fix.</p>
-            <div class="back-link"><a href="#top">↑ Back to top</a></div>
+                <thead>
+                  <tr>
+                    <th>Browser</th>
+                    <th>Minimum version</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Google Chrome</td>
+                    <td>113+</td>
+                    <td>Recommended — best WebGPU support</td>
+                  </tr>
+                  <tr>
+                    <td>Microsoft Edge</td>
+                    <td>113+</td>
+                    <td>Chromium-based; performs similarly to Chrome</td>
+                  </tr>
+                  <tr>
+                    <td>Apple Safari</td>
+                    <td>18+</td>
+                    <td>Supported on macOS and iPadOS (M-series)</td>
+                  </tr>
+                  <tr>
+                    <td>Mozilla Firefox</td>
+                    <td>—</td>
+                    <td>Not currently supported; WebGPU is not stable in Firefox</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">If
+                your browser is not listed or is below the minimum version, ThinkHere will display an error
+                on load. Updating your browser to the latest version is the simplest fix.</p>
+              <div class="back-link"><a href="#top">↑ Back to top</a></div>
           </article>
 
           <article class="article" id="what-devices-work-best-with-thinkhere">
@@ -1242,7 +1242,8 @@
               ThinkHere checks for WebGPU support automatically when you open the app and will display an
               error if it is unavailable. If you want to check manually:</p>
             <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">
-              <strong>In Chrome or Edge:</strong></p>
+              <strong>In Chrome or Edge:</strong>
+            </p>
             <ul class="doc-list" style="list-style:decimal; padding-left:16px;">
               <li>Type <code
                   style="font-family:var(--mono);font-size:13px;background:var(--paper-mid);padding:2px 6px;">chrome://gpu</code>
@@ -1254,7 +1255,8 @@
                 update your graphics drivers and try again.</li>
               </ol>
               <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">
-                <strong>In Safari:</strong></p>
+                <strong>In Safari:</strong>
+              </p>
               <ul class="doc-list" style="list-style:decimal; padding-left:16px;">
                 <li>Open Safari Preferences → Advanced → enable <strong>Show features for web developers</strong>.</li>
                 <li>Go to Develop → Experimental Features and confirm WebGPU is enabled.</li>

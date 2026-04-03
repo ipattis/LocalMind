@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usage Policies — ThinkHere</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Specific page style overrides */
+    .page-wrap {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrap">
+    <header class="page-header">
+      <a class="page-header-logo" href="/">
+        <svg width="13" height="15" viewBox="0 0 72 80" fill="none">
+          <circle cx="24" cy="9" r="6" fill="#b85c38" />
+          <circle cx="48" cy="9" r="6" fill="#b85c38" />
+          <path d="M 58,52 A 22,22 0 1 0 50,62" stroke="#f4f1eb" stroke-width="6" fill="none" stroke-linecap="round"
+            class="ql-stroke" />
+          <line x1="50" y1="62" x2="62" y2="76" stroke="#f4f1eb" stroke-width="6" stroke-linecap="round"
+            class="ql-stroke" />
+        </svg>
+        ThinkHere
+      </a>
+      <div class="page-header-right">
+        <a class="page-nav" href="about.html">About</a>
+        <a class="page-nav" href="blog.html">Blog</a>
+        <a class="page-nav" class="page-nav" href="guide.html">Guide</a>
+        <div class="page-theme-toggle">
+          <button class="page-theme-btn active" id="btn-dark" onclick="setTheme('dark')">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+              <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" />
+            </svg>
+          </button>
+          <button class="page-theme-btn" id="btn-light" onclick="setTheme('light')">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" />
+              <path
+                d="M12 2v2M12 20v2M2 12h2M20 12h2M5.63 5.63l1.41 1.41M16.96 16.96l1.41 1.41M5.63 18.37l1.41-1.41M16.96 7.04l1.41-1.41"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+        <a class="btn-top-ghost" href="#" onclick="signIn(); return false;">Sign In</a>
+        <a class="btn-top-solid" href="https://app.thinkhere.ai/?mode=signup">Create Account</a>
+      </div>
+    </header>
+    <div class="legal-layout">
+      <div class="doc-nav">
+        <div class="nav-doc-title">Usage Policies</div>
+        <ul>
+          <li><a href="#s1">Philosophy</a></li>
+          <li><a href="#s2">Acceptable Use</a></li>
+          <li><a href="#s3">Harmful Content</a></li>
+          <li><a href="#s4">Deception &amp; Fraud</a></li>
+          <li><a href="#s5">Privacy Violations</a></li>
+          <li><a href="#s6">Illegal Activity</a></li>
+          <li><a href="#s7">AI Output Responsibility</a></li>
+          <li><a href="#s8">Model Licences</a></li>
+          <li><a href="#s9">Open Source Use</a></li>
+          <li><a href="#s10">Third-Party IP</a></li>
+          <li><a href="#s11">IP Complaints</a></li>
+          <li><a href="#s12">Responsible Disclosure</a></li>
+          <li><a href="#s13">Enforcement</a></li>
+          <li><a href="#s14">Reporting</a></li>
+          <li><a href="#s15">Updates &amp; Contact</a></li>
+        </ul>
+        <div class="nav-divider"></div>
+        <div class="nav-other-label">Other Documents</div>
+        <ul class="nav-other">
+          <li><a href="thinkhere-terms-of-use.html">Terms of Use</a></li>
+          <li><a href="thinkhere-privacy-policy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="doc-main">
+        <div class="legal-cover">
+          <div class="cover-grain"></div>
+          <div class="cover-label">ThinkHere · Legal</div>
+          <h1 class="cover-title">Usage <em>Policies</em></h1>
+          <div class="cover-meta">
+            <span>Effective 27 March 2026</span>
+            <span>Open source · MIT Licence</span>
+            <span>Governed by English &amp; Welsh Law</span>
+          </div>
+        </div>
+
+        <div class="notice-banner">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5" />
+            <path d="M10 6v4M10 13.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          <p><strong>These policies define what good-faith use of ThinkHere looks like.</strong> Because AI processing
+            is
+            entirely local, Qanata Labs cannot monitor what you generate — which is precisely why we ask you to use
+            ThinkHere responsibly.</p>
+        </div>
+
+        <p class="intro-para">These Usage Policies set out the standards we ask all ThinkHere users to uphold. Our goal
+          is a
+          private, capable AI tool that is used responsibly and for good.</p>
+
+        <div class="doc-section dark" id="s1">
+          <span class="section-number">01 — Philosophy</span>
+          <h2 class="section-heading">Why These Policies Exist</h2>
+          <p class="body">ThinkHere was built on a belief: that people should be able to think freely with AI without
+            sacrificing privacy. The model runs on your device. Your conversations stay in your browser. No one at
+            Qanata
+            Labs can read what you write.</p>
+          <p class="body">That privacy guarantee only works if users act in good faith. These policies define what good
+            faith looks like and set the standards we apply when we become aware of a violation through account-level
+            signals, user reports, or other means outside private conversation content.</p>
+        </div>
+
+        <!-- 2 -->
+        <div class="doc-section" id="s2">
+          <span class="section-number">02 — Acceptable Use</span>
+          <h2 class="section-heading">What ThinkHere Is For</h2>
+          <p class="body">ThinkHere is designed for any lawful purpose where an AI thinking partner is useful:</p>
+          <div class="tag-box permitted">
+            <div class="tag-box-label">Permitted</div>
+            <ul>
+              <li>Personal writing, creative projects, and journaling</li>
+              <li>Research, summarisation, and education</li>
+              <li>Professional work including drafting, analysis, and strategic planning</li>
+              <li>Building and querying personal or team knowledge bases</li>
+              <li>Exploring and experimenting with local AI models</li>
+            </ul>
+          </div>
+
+
+          <div class="doc-section dark" id="s3">
+            <span class="section-number">03 — Prohibited: Harmful Content</span>
+            <h2 class="section-heading">Content That Causes Harm</h2>
+            <div class="tag-box prohibited">
+              <div class="tag-box-label">Never permitted</div>
+              <ul>
+                <li>Content that sexually exploits or endangers children</li>
+                <li>Detailed technical instructions for weapons capable of mass harm — biological, chemical,
+                  radiological, or
+                  explosive</li>
+                <li>Malware, ransomware, exploits, or code designed to damage systems or harm people</li>
+                <li>Content that incites violence, terrorism, or hatred against individuals or groups</li>
+              </ul>
+            </div>
+
+
+            <div class="doc-section" id="s4">
+              <span class="section-number">04 — Prohibited: Deception &amp; Fraud</span>
+              <h2 class="section-heading">Deceptive and Fraudulent Use</h2>
+              <div class="tag-box prohibited">
+                <div class="tag-box-label">Never permitted</div>
+                <ul>
+                  <li>Deepfakes or synthetic media designed to deceive</li>
+                  <li>Disinformation or coordinated inauthentic content at scale</li>
+                  <li>Impersonation of real individuals or organisations in a harmful or deceptive manner</li>
+                  <li>Phishing, fraud, or social engineering</li>
+                </ul>
+              </div>
+
+
+              <div class="doc-section dark" id="s5">
+                <span class="section-number">05 — Prohibited: Privacy Violations</span>
+                <h2 class="section-heading">Violating Others' Privacy</h2>
+                <div class="tag-box prohibited">
+                  <div class="tag-box-label">Never permitted</div>
+                  <ul>
+                    <li>Processing or aggregating others' personal data without their consent</li>
+                    <li>Facilitating stalking, surveillance, or harassment of individuals</li>
+                    <li>Attempting to deanonymise individuals from datasets</li>
+                  </ul>
+                </div>
+
+
+                <div class="doc-section" id="s6">
+                  <span class="section-number">06 — Prohibited: Illegal Activity</span>
+                  <h2 class="section-heading">Illegal Use</h2>
+                  <p class="body">You must not use ThinkHere to plan, facilitate, or assist with any activity that is
+                    illegal under
+                    applicable law, including fraud, money laundering, or theft of intellectual property.</p>
+                </div>
+
+                <!-- 7 -->
+                <div class="doc-section dark" id="s7">
+                  <span class="section-number">07 — AI Output Responsibility</span>
+                  <h2 class="section-heading">Your Responsibility for AI-Generated Content</h2>
+                  <p class="body">ThinkHere's responses are generated by AI models running locally on your device. AI
+                    inference is
+                    entirely outside Qanata Labs's view or control at the point of generation. Please bear this in mind:
+                  </p>
+                  <ul class="doc-list">
+                    <li>AI outputs can be inaccurate, incomplete, or biased — always apply your own judgement before
+                      acting on them
+                    </li>
+                    <li>AI outputs are not professional advice in any regulated field; consult a qualified professional
+                      for legal,
+                      medical, financial, or other regulated matters</li>
+                    <li>You are responsible for how you use, share, or act on AI-generated content</li>
+                  </ul>
+                </div>
+
+                <!-- 8 -->
+                <div class="doc-section" id="s8">
+                  <span class="section-number">08 — Model Licences</span>
+                  <h2 class="section-heading">Third-Party Model Terms</h2>
+                  <p class="body">The AI models available in ThinkHere are provided by their respective publishers under
+                    their own
+                    licences — for example, HuggingFace's SmolLM2 models and Google's Gemma models. By using a model in
+                    ThinkHere,
+                    you agree to comply with its applicable licence.</p>
+                  <p class="body">Model availability, permitted use, and commercial terms may vary by model and may
+                    change if a
+                    publisher updates their licence. We will maintain links to model licences in our documentation. If a
+                    publisher
+                    removes or restricts a model, we may need to remove it from ThinkHere without advance notice — see
+                    the Service
+                    &amp; Model Availability section in the <a href="thinkhere-terms-of-use.html">Terms of Use</a>.</p>
+                </div>
+
+                <!-- 9 -->
+                <div class="doc-section dark" id="s9">
+                  <span class="section-number">09 — Open Source Use</span>
+                  <h2 class="section-heading">Forking and Redistributing ThinkHere</h2>
+                  <p class="body">ThinkHere is open source under the MIT licence. If you fork or redistribute ThinkHere,
+                    you must do
+                    so in accordance with the MIT licence terms. You must not use Qanata Labs's name, ThinkHere
+                    branding, or logos
+                    in derivative works in a way that implies official endorsement without our written consent.</p>
+                </div>
+
+                <!-- 10 -->
+                <div class="doc-section" id="s10">
+                  <span class="section-number">10 — Third-Party IP</span>
+                  <h2 class="section-heading">Intellectual Property of Others</h2>
+                  <p class="body">Do not use ThinkHere to reproduce, distribute, or create derivative works from
+                    copyrighted
+                    material in ways that infringe third-party rights. Content you create with ThinkHere is yours, but
+                    your use of
+                    that content remains subject to applicable law.</p>
+                </div>
+
+
+
+                <div class="doc-section dark" id="s11">
+                  <span class="section-number">11 — IP Complaints</span>
+                  <h2 class="section-heading">Reporting Intellectual Property Concerns</h2>
+                  <p class="body">If you believe that ThinkHere's source code, documentation, or any content we publish
+                    infringes
+                    your intellectual property rights, please contact us with the following information:</p>
+                  <ul class="doc-list">
+                    <li>A description of the intellectual property you claim has been infringed</li>
+                    <li>The specific URL or location of the allegedly infringing material</li>
+                    <li>Your contact details</li>
+                    <li>A statement that you have a good-faith belief that the use is not authorised</li>
+                  </ul>
+                  <p class="body">Send IP complaints to <a href="mailto:legal@qanatalabs.com">legal@qanatalabs.com</a>.
+                    We will
+                    review and respond promptly. Note that because conversation content is processed locally on users'
+                    devices and
+                    is never accessible to Qanata Labs, we are not able to review or remove user-generated content
+                    produced using
+                    ThinkHere.</p>
+                </div>
+
+                <!-- 12 -->
+                <div class="doc-section" id="s12">
+                  <span class="section-number">12 — Responsible Disclosure</span>
+                  <h2 class="section-heading">Reporting Security Vulnerabilities</h2>
+                  <p class="body">If you discover a security vulnerability in ThinkHere, please report it to us
+                    responsibly. Because
+                    ThinkHere is open source, we welcome responsible security research. We ask that you give us a
+                    reasonable
+                    opportunity to address any vulnerability before public disclosure.</p>
+                  <div class="contact-card">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <rect x="1" y="3" width="14" height="10" rx="1" stroke="#b85c38" stroke-width="1.3" />
+                      <path d="M1 4l7 5 7-5" stroke="#b85c38" stroke-width="1.3" />
+                    </svg>
+                    <a href="mailto:security@qanatalabs.com">security@qanatalabs.com</a>
+                  </div>
+
+
+                  <div class="doc-section dark" id="s13">
+                    <span class="section-number">13 — Enforcement</span>
+                    <h2 class="section-heading">How We Enforce These Policies</h2>
+                    <p class="body">Because ThinkHere processes all AI output locally on your device, Qanata Labs has no
+                      visibility
+                      into your conversations. We cannot and do not monitor what you generate. Enforcement of these
+                      policies is
+                      therefore limited to situations where we become aware of a violation through one of the following:
+                    </p>
+                    <ul class="doc-list">
+                      <li>Reports submitted by users or third parties</li>
+                      <li>Account-level signals such as suspicious authentication patterns, abuse of account features,
+                        or automated
+                        attacks on our infrastructure</li>
+                      <li>Payment abuse or fraud where a paid tier is active</li>
+                      <li>Information provided to us by law enforcement or rights holders</li>
+                    </ul>
+                    <p class="body">Where we identify a violation, we may issue a warning, restrict account features,
+                      suspend or
+                      terminate the account, or take other steps required by law. We will act proportionately to the
+                      severity of the
+                      violation.</p>
+                  </div>
+
+                  <!-- 14 -->
+                  <div class="doc-section" id="s14">
+                    <span class="section-number">14 — Reporting</span>
+                    <h2 class="section-heading">Report a Violation</h2>
+                    <p class="body">If you encounter behaviour that appears to violate these policies — for example,
+                      misuse of account
+                      features, suspected automated attacks, or violations of model licence terms — please let us know:
+                    </p>
+                    <div class="contact-card">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <rect x="1" y="3" width="14" height="10" rx="1" stroke="#b85c38" stroke-width="1.3" />
+                        <path d="M1 4l7 5 7-5" stroke="#b85c38" stroke-width="1.3" />
+                      </svg>
+                      <a href="mailto:safety@qanatalabs.com">safety@qanatalabs.com</a>
+                    </div>
+
+
+                    <div class="doc-section dark" id="s15">
+                      <span class="section-number">15 — Updates &amp; Contact</span>
+                      <h2 class="section-heading">Policy Updates and General Enquiries</h2>
+                      <p class="body">These policies may be updated to reflect new features, legal requirements, or
+                        community feedback.
+                        We will notify users of significant changes via the ThinkHere interface. Continued use after an
+                        updated policy's
+                        effective date constitutes acceptance.</p>
+                      <p class="body">General usage policy questions:</p>
+                      <div class="contact-card">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <rect x="1" y="3" width="14" height="10" rx="1" stroke="#b85c38" stroke-width="1.3" />
+                          <path d="M1 4l7 5 7-5" stroke="#b85c38" stroke-width="1.3" />
+                        </svg>
+                        <a href="mailto:legal@qanatalabs.com">legal@qanatalabs.com</a>
+                      </div>
+
+
+
+                    </div>
+                  </div>
+
+                  <div class="footer-trust">
+                    <span class="trust-pill">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      </svg>
+                      Secure
+                    </span>
+                    <span class="trust-dot"></span>
+                    <span class="trust-pill">
+                      <svg viewBox="0 0 24 24">
+                        <rect x="3" y="11" width="18" height="11" rx="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                      </svg>
+                      Private
+                    </span>
+                    <span class="trust-dot"></span>
+                    <span class="trust-pill">
+                      <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 8v4l3 3" />
+                      </svg>
+                      Confidential
+                    </span>
+                  </div>
+                  <p class="legal" style="padding-bottom:24px;">
+                    By using ThinkHere you agree to our <a href="terms.html">Terms of Use</a>, <a
+                      href="privacy.html">Privacy Policy</a> and <a href="usage.html">Usage Policies</a> &middot; A <a
+                      href="https://www.qanatalabs.com" target="_blank" rel="noopener">Qanata Labs</a> product
+                  </p>
+
+                </div>
+                <script>
+                  function setTheme(t) {
+                    document.documentElement.setAttribute('data-theme', t);
+                    document.getElementById('btn-dark').classList.toggle('active', t === 'dark');
+                    document.getElementById('btn-light').classList.toggle('active', t === 'light');
+                    var strokeCol = t === 'light' ? '#9a9a9a' : '#f4f1eb';
+                    document.querySelectorAll('.ql-stroke').forEach(function (el) { el.setAttribute('stroke', strokeCol); });
+                    localStorage.setItem('thinkhere-theme', t);
+                  }
+                  (function () {
+                    var saved = localStorage.getItem('thinkhere-theme');
+                    if (saved) setTheme(saved);
+                  })();
+                </script>
+                <script type="module" src="js/auth.js"></script>
+</body>
+
+</html>

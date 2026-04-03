@@ -5,180 +5,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Terms of Use — ThinkHere</title>
-  <meta name="description" content="ThinkHere Terms of Use.">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
+    /* Specific page style overrides */
     .page-wrap {
-      max-width: 1020px;
-      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      min-height: 100dvh;
+      min-height: 100vh;
     }
 
     .page-header {
-      padding: 20px 24px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      background: var(--topbar-bg);
-      backdrop-filter: blur(12px);
-    }
-
-    .page-header-logo {
-      font-family: var(--font-sans);
-      font-weight: 700;
-      font-size: 1.25rem;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .page-header-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .page-nav {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-dim);
-      text-decoration: none;
-      letter-spacing: 0.03em;
-      transition: color 0.2s ease;
-    }
-
-    .page-nav:hover {
-      color: var(--accent);
-    }
-
-    .page-content {
-      flex: 1;
-      padding: 0 24px;
-      overflow-y: auto;
-    }
-
-    .legal-doc {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 64px 0 80px;
-    }
-
-    .legal-doc .doc-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 16px;
-    }
-
-    .legal-doc h1 {
-      font-family: var(--font-sans);
-      font-size: 2.4rem;
-      font-weight: 300;
-      letter-spacing: -0.025em;
-      color: var(--hero-h);
-      margin-bottom: 8px;
-      line-height: 1.2;
-    }
-
-    .legal-doc .effective-date {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--text-dim);
-      margin-bottom: 48px;
-    }
-
-    .legal-doc h2 {
-      font-family: var(--font-sans);
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-      margin: 40px 0 12px;
-      letter-spacing: -0.01em;
-    }
-
-    .legal-doc p {
-      color: var(--text-muted);
-      font-size: 0.92rem;
-      line-height: 1.75;
-      margin-bottom: 16px;
-    }
-
-    .legal-doc a {
-      color: var(--accent);
-      text-decoration: underline;
-    }
-
-    .legal-doc a:hover {
-      color: var(--text);
-    }
-
-    .page-footer {
-      padding: 24px;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--text-dim);
-      letter-spacing: 0.04em;
-    }
-
-    .page-theme-toggle {
-      display: flex;
-      align-items: center;
-      background: var(--surface2);
-      border: 1px solid var(--border-md);
-      border-radius: 20px;
-      padding: 3px;
-    }
-
-    .page-theme-btn {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 10px;
-      border-radius: 16px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-family: var(--font-sans);
-      font-size: 11px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.18s;
-    }
-
-    .page-theme-btn.active {
-      background: var(--surface);
-      color: var(--text);
-      box-shadow: 0 1px 4px var(--shadow);
-    }
-
-    @media (max-width: 600px) {
-      .page-header-right {
-        gap: 8px;
-      }
-
-      .page-nav {
-        display: none;
-      }
-
-      .legal-doc h1 {
-        font-size: 1.8rem;
-      }
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
   </style>
 </head>
@@ -200,7 +42,7 @@
       <div class="page-header-right">
         <a class="page-nav" href="about.html">About</a>
         <a class="page-nav" href="blog.html">Blog</a>
-        <a class="page-nav" href="guide.html">Guide</a>
+        <a class="page-nav" class="page-nav" href="guide.html">Guide</a>
         <div class="page-theme-toggle">
           <button class="page-theme-btn active" id="btn-dark" onclick="setTheme('dark')">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
@@ -217,122 +59,467 @@
             </svg>
           </button>
         </div>
+        <a class="btn-top-ghost" href="#" onclick="signIn(); return false;">Sign In</a>
+        <a class="btn-top-solid" href="https://app.thinkhere.ai/?mode=signup">Create Account</a>
       </div>
     </header>
-
-    <div class="page-content">
-      <div class="legal-doc">
-        <div class="doc-eyebrow">Legal</div>
-        <h1>Terms of Use</h1>
-        <p class="effective-date">Effective date: March 2026</p>
-
-        <p>These Terms of Use govern your access to and use of ThinkHere, a product of Qanata Labs. By using ThinkHere
-          you agree to these terms. If you do not agree, please do not use the service.</p>
-
-        <h2>1. What ThinkHere Is</h2>
-        <p>ThinkHere is a web application that runs AI language models entirely within your browser using WebGPU. No
-          prompts, messages, documents, or outputs are transmitted to any server operated by Qanata Labs or any third
-          party. All inference occurs locally on your device.</p>
-
-        <h2>2. Permitted Use</h2>
-        <p>You may use ThinkHere for personal, research, commercial, or educational purposes. You agree not to use
-          ThinkHere to generate content that is unlawful, harmful, fraudulent, or in violation of any applicable law or
-          the rights of others.</p>
-
-        <h2>3. No Data Collection</h2>
-        <p>ThinkHere does not transmit your conversations, documents, or any input to external servers. Conversation
-          history, knowledge base documents, and model cache files are stored locally in your browser's IndexedDB and
-          Cache API. We have no access to this data. Clearing your browser data will permanently delete it.</p>
-
-        <h2>4. Accounts (app.thinkhere.ai)</h2>
-        <p>The authenticated version of ThinkHere at <a href="https://app.thinkhere.ai">app.thinkhere.ai</a> requires an
-          account. Your account information (email address and subscription status) is stored securely and used only to
-          manage your access to the service. We do not sell or share your account information with third parties, except
-          as required to operate the service (e.g. payment processing via Stripe).</p>
-
-        <h2>5. Subscriptions and Payments</h2>
-        <p>Paid features are available through a subscription. Payments are processed by Stripe. Subscription terms,
-          pricing, and cancellation policies are presented at checkout. Refunds are handled on a case-by-case basis —
-          contact us at <a href="mailto:contact@qanatalabs.com">contact@qanatalabs.com</a>.</p>
-
-        <h2>6. AI-Generated Content</h2>
-        <p>ThinkHere runs open-source AI models. Outputs may be inaccurate, incomplete, or inappropriate. You are
-          responsible for how you use AI-generated content. Qanata Labs makes no warranties regarding the accuracy or
-          fitness of model outputs for any particular purpose.</p>
-
-        <h2>7. Intellectual Property</h2>
-        <p>The ThinkHere application code is open source under the MIT License. The ThinkHere name, Qanata Labs name,
-          and associated brand assets are the property of Qanata Labs and may not be used without permission. AI models
-          available within ThinkHere are subject to their own respective licenses.</p>
-
-        <h2>8. Availability</h2>
-        <p>We aim to keep ThinkHere available but do not guarantee uninterrupted access. We may update, modify, or
-          discontinue features at any time. We will provide reasonable notice of material changes where possible.</p>
-
-        <h2>9. Limitation of Liability</h2>
-        <p>ThinkHere is provided "as is" without warranty of any kind. To the fullest extent permitted by law, Qanata
-          Labs shall not be liable for any indirect, incidental, special, or consequential damages arising from your use
-          of the service.</p>
-
-        <h2>10. Governing Law</h2>
-        <p>These terms are governed by the laws of the jurisdiction in which Qanata Labs operates, without regard to
-          conflict of law principles.</p>
-
-        <h2>11. Changes to These Terms</h2>
-        <p>We may update these terms from time to time. Continued use of ThinkHere after changes constitutes acceptance
-          of the updated terms. The effective date at the top of this page reflects when terms were last revised.</p>
-
-        <h2>12. Contact</h2>
-        <p>Questions about these terms? Email us at <a href="mailto:contact@qanatalabs.com">contact@qanatalabs.com</a>.
-        </p>
+    <div class="legal-layout">
+      <div class="doc-nav">
+        <div class="nav-doc-title">Terms of Use</div>
+        <ul>
+          <li><a href="#s1">About ThinkHere</a></li>
+          <li><a href="#s2">Acceptance</a></li>
+          <li><a href="#s3">Eligibility</a></li>
+          <li><a href="#s4">How It Works</a></li>
+          <li><a href="#s5">Service Tiers</a></li>
+          <li><a href="#s6">Device Requirements</a></li>
+          <li><a href="#s7">Your Account</a></li>
+          <li><a href="#s8">Permitted Use</a></li>
+          <li><a href="#s9">Prohibited Conduct</a></li>
+          <li><a href="#s10">Open Source &amp; IP</a></li>
+          <li><a href="#s11">Privacy</a></li>
+          <li><a href="#s12">Disclaimers</a></li>
+          <li><a href="#s13">Liability</a></li>
+          <li><a href="#s14">Service &amp; Models</a></li>
+          <li><a href="#s15">Beta Features</a></li>
+          <li><a href="#s16">Paid Tier Billing</a></li>
+          <li><a href="#s17">Modifications</a></li>
+          <li><a href="#s18">Termination</a></li>
+          <li><a href="#s19">Governing Law</a></li>
+          <li><a href="#s20">Contact</a></li>
+        </ul>
+        <div class="nav-divider"></div>
+        <div class="nav-other-label">Other Documents</div>
+        <ul class="nav-other">
+          <li><a href="thinkhere-privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="thinkhere-usage-policies.html">Usage Policies</a></li>
+        </ul>
       </div>
-    </div>
 
-    <div class="footer-trust">
-      <span class="trust-pill">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        </svg>
-        Secure
-      </span>
-      <span class="trust-dot"></span>
-      <span class="trust-pill">
-        <svg viewBox="0 0 24 24">
-          <rect x="3" y="11" width="18" height="11" rx="2" />
-          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-        </svg>
-        Private
-      </span>
-      <span class="trust-dot"></span>
-      <span class="trust-pill">
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 8v4l3 3" />
-        </svg>
-        Confidential
-      </span>
-    </div>
-    <p class="legal">
-      By using ThinkHere you agree to our <a href="https://thinkhere.ai/terms.html">Terms of Use</a> and <a
-        href="https://thinkhere.ai/privacy.html">Privacy Policy</a> &middot; A <a href="https://www.qanatalabs.com"
-        target="_blank" rel="noopener">Qanata Labs</a> product
-    </p>
-  </div>
+      <div class="doc-main">
+        <div class="legal-cover">
+          <div class="cover-grain"></div>
+          <div class="cover-label">ThinkHere · Legal</div>
+          <h1 class="cover-title">Terms of <em>Use</em></h1>
+          <div class="cover-meta">
+            <span>Effective 27 March 2026</span>
+            <span>Open source · MIT Licence</span>
+            <span>Governed by English &amp; Welsh Law</span>
+          </div>
+        </div>
 
-  <script>
-    function setTheme(t) {
-      document.documentElement.setAttribute('data-theme', t);
-      document.getElementById('btn-dark').classList.toggle('active', t === 'dark');
-      document.getElementById('btn-light').classList.toggle('active', t === 'light');
-      var strokeCol = t === 'light' ? '#9a9a9a' : '#f4f1eb';
-      document.querySelectorAll('.ql-stroke').forEach(function (el) { el.setAttribute('stroke', strokeCol); });
-      localStorage.setItem('thinkhere-theme', t);
-    }
-    (function () {
-      var saved = localStorage.getItem('thinkhere-theme');
-      if (saved) setTheme(saved);
-    })();
-  </script>
+        <div class="notice-banner">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 1.667L2.5 5v5c0 4.583 3.208 8.875 7.5 9.833 4.292-.958 7.5-5.25 7.5-9.833V5L10 1.667z"
+              stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+          </svg>
+          <p><strong>Your prompts and responses never leave your browser tab.</strong> ThinkHere runs entirely on your
+            own
+            hardware — there is no server that processes your conversations.</p>
+        </div>
+
+        <p class="intro-para">Please read these Terms of Use carefully before using ThinkHere. By accessing or using
+          ThinkHere, you agree to be bound by these terms.</p>
+
+        <div class="doc-section dark" id="s1">
+          <span class="section-number">01 — About ThinkHere</span>
+          <h2 class="section-heading">What ThinkHere Is</h2>
+          <p class="body">ThinkHere is an AI chat application that runs entirely inside your web browser. There is no
+            server
+            that processes your prompts. The language model runs on your own device's GPU using WebGPU, and your
+            conversations are stored only in your browser's local storage. Your words never leave your browser tab.</p>
+          <p class="body">ThinkHere is developed and operated by Qanata Labs and is open source under the MIT licence.
+            The
+            source code is publicly available.</p>
+        </div>
+
+        <!-- 2 -->
+        <div class="doc-section" id="s2">
+          <span class="section-number">02 — Acceptance</span>
+          <h2 class="section-heading">Acceptance of Terms</h2>
+          <p class="body">These Terms of Use ("Terms") govern your access to and use of ThinkHere. By using ThinkHere in
+            any
+            manner — including visiting the website, creating an account, or chatting with the AI — you agree to these
+            Terms. If you do not agree, please do not use ThinkHere.</p>
+        </div>
+
+        <!-- 3 -->
+        <div class="doc-section dark" id="s3">
+          <span class="section-number">03 — Eligibility</span>
+          <h2 class="section-heading">Who Can Use ThinkHere</h2>
+          <p class="body">You must be at least 13 years of age to use ThinkHere. If you are aged 13 and under 18, you
+            must
+            have the consent of a parent or legal guardian, and that parent or guardian accepts these Terms on your
+            behalf.
+            By using ThinkHere, you confirm that you meet these requirements.</p>
+          <p class="body">ThinkHere is not directed at children under 13. If we become aware that a user is under 13, we
+            will close their account and delete their data promptly.</p>
+        </div>
+
+        <!-- 4 -->
+        <div class="doc-section" id="s4">
+          <span class="section-number">04 — How It Works</span>
+          <h2 class="section-heading">Browser-Based Local AI</h2>
+          <span class="sub-label">4.1 — Local inference</span>
+          <p class="body">ThinkHere uses WebGPU and the WebLLM framework to run language models directly in your
+            browser.
+            When you load a model for the first time, the model weights are downloaded from our servers and stored in
+            your
+            browser's Cache Storage. All subsequent inference — every response the AI generates — happens on your
+            hardware.
+            No network request carries your conversation to any server at any point.</p>
+          <span class="sub-label">4.2 — Your conversations</span>
+          <p class="body">Your conversations are stored in your browser's local storage. They are not transmitted to
+            Qanata
+            Labs or any third party. If you clear your browser data or use ThinkHere in a private or incognito window,
+            your
+            conversation history will not be retained.</p>
+          <span class="sub-label">4.3 — Model weights</span>
+          <p class="body">Model weights (typically 1–3 GB) are downloaded from our servers on first use and cached
+            locally
+            in your browser. These weights are provided by their respective publishers (such as Google's Gemma models)
+            and
+            are subject to their own licences. By using a model in ThinkHere, you agree to comply with that model's
+            applicable licence terms.</p>
+        </div>
+
+        <!-- 5 -->
+        <div class="doc-section dark" id="s5">
+          <span class="section-number">05 — Service Tiers</span>
+          <h2 class="section-heading">Free, Logged-In, and Paid</h2>
+          <span class="sub-label">5.1 — Free, no account required</span>
+          <p class="body">You can use ThinkHere immediately without creating an account. This tier gives you access to
+            the
+            SmolLM2 1.7B model, a fast and lightweight chat model, with no sign-up required.</p>
+          <span class="sub-label">5.2 — Free logged-in account</span>
+          <p class="body">Creating a free account unlocks the full model library (currently nine models and growing),
+            system
+            prompts, temperature and generation controls, conversation history, export, a knowledge base with
+            retrieval-augmented generation (RAG), and file upload as context. A free account is and will always remain
+            free.
+          </p>
+          <span class="sub-label">5.3 — Paid tier (coming soon)</span>
+          <p class="body">We are developing a paid tier that will include priority support and additional premium
+            features.
+            Details — including pricing, billing terms, and cancellation rights — will be published before the paid tier
+            launches. All tiers, including any future paid tier, will continue to run AI inference locally in your
+            browser.
+            See Section 16 for the billing framework that will apply.</p>
+        </div>
+
+        <!-- 6 -->
+        <div class="doc-section" id="s6">
+          <span class="section-number">06 — Device Requirements</span>
+          <h2 class="section-heading">What You Need to Run ThinkHere</h2>
+          <p class="body">Because ThinkHere runs on your local hardware, your device must meet minimum requirements:</p>
+          <ul class="doc-list">
+            <li>Browser: Chrome 113+, Edge 113+, or Safari 18+ with WebGPU enabled</li>
+            <li>RAM: at least 6 GB for the smallest model; larger models require more</li>
+            <li>Best experience: desktop or laptop with a dedicated or integrated GPU</li>
+            <li>iPhone: not currently supported due to iOS memory constraints</li>
+            <li>iPad: M-series iPads may work, though performance may vary</li>
+          </ul>
+          <p class="body">ThinkHere is a browser application. It does not require installation and is not available as a
+            standalone desktop or mobile application.</p>
+        </div>
+
+        <!-- 7 -->
+        <div class="doc-section dark" id="s7">
+          <span class="section-number">07 — Your Account</span>
+          <h2 class="section-heading">Accounts and Responsibilities</h2>
+          <span class="sub-label">7.1 — What your account stores</span>
+          <p class="body">When you create an account, it stores your preferences, settings, and feature access only.
+            Your AI
+            conversations are never associated with your account or stored on Qanata Labs's servers. We have no access
+            to
+            your conversations regardless of which tier you use.</p>
+          <span class="sub-label">7.2 — Your responsibilities</span>
+          <ul class="doc-list">
+            <li>Provide accurate information when registering</li>
+            <li>Keep your credentials secure and not share them</li>
+            <li>Take responsibility for all activity under your account</li>
+            <li>Notify us promptly at <a
+                href="/cdn-cgi/l/email-protection#c3b0a6a0b6b1aab7ba83b2a2ada2b7a2afa2a1b0eda0acae"><span
+                  class="__cf_email__"
+                  data-cfemail="0f7c6a6c7a7d667b764f7e6e616e7b6e636e6d7c216c6062">[email&#160;protected]</span></a> of
+              any
+              unauthorised access</li>
+          </ul>
+        </div>
+
+        <!-- 8 -->
+        <div class="doc-section" id="s8">
+          <span class="section-number">08 — Permitted Use</span>
+          <h2 class="section-heading">What ThinkHere Is For</h2>
+          <p class="body">ThinkHere is provided for any lawful personal, educational, and professional purpose:</p>
+          <div class="tag-box permitted">
+            <div class="tag-box-label">Permitted</div>
+            <ul>
+              <li>Writing, brainstorming, and creative projects</li>
+              <li>Research, summarisation, and learning</li>
+              <li>Professional drafting, analysis, and planning</li>
+              <li>Organising personal or team knowledge</li>
+              <li>Exploring and experimenting with local AI models</li>
+            </ul>
+          </div>
+
+
+          <div class="doc-section dark" id="s9">
+            <span class="section-number">09 — Prohibited Conduct</span>
+            <h2 class="section-heading">What You Must Not Do</h2>
+            <p class="body">You must not use ThinkHere for any unlawful purpose or in ways that cause harm to others.
+              The full
+              prohibited-use rules are set out in our <a href="thinkhere-usage-policies.html">Usage Policies</a>. In
+              summary,
+              you must not use ThinkHere to generate harmful, abusive, or illegal content; produce material that
+              exploits or
+              endangers children; create weapons-related instructions; generate malware; spread disinformation or
+              deepfakes;
+              or harass or stalk individuals.</p>
+            <p class="body">Because ThinkHere processes all AI output locally on your device, Qanata Labs has no
+              visibility
+              into what you generate. We rely on your good faith. Violations reported to us, or evident from
+              account-level
+              behaviour, may result in account suspension or termination.</p>
+          </div>
+
+          <!-- 10 -->
+          <div class="doc-section" id="s10">
+            <span class="section-number">10 — Open Source &amp; IP</span>
+            <h2 class="section-heading">Intellectual Property</h2>
+            <span class="sub-label">10.1 — Open source</span>
+            <p class="body">ThinkHere is published under the MIT licence. You are free to inspect, fork, modify, and
+              redistribute the source code in accordance with the MIT licence terms. Nothing in these Terms restricts
+              rights
+              already granted to you by the MIT licence.</p>
+            <span class="sub-label">10.2 — Your content</span>
+            <p class="body">Because your conversations never leave your browser, they remain entirely under your
+              control.
+              Qanata Labs asserts no ownership over your inputs, outputs, or any content you create using ThinkHere.</p>
+            <span class="sub-label">10.3 — Branding</span>
+            <p class="body">The ThinkHere name, logo, and Qanata Labs branding are our trademarks. The MIT licence does
+              not
+              grant you a licence to use our trademarks. Do not use our name or logo in a way that implies endorsement
+              without
+              our written consent.</p>
+            <span class="sub-label">10.4 — Third-party models</span>
+            <p class="body">AI models available in ThinkHere (such as SmolLM2 by HuggingFace and Gemma 3n by Google) are
+              owned
+              by their respective
+              publishers and subject to their own licences. Model availability, permitted use, and commercial terms may
+              vary
+              by model. Your use of any model in ThinkHere must comply with that model's licence. We will maintain links
+              to
+              applicable model licences in our documentation.</p>
+            <span class="sub-label">10.5 — IP complaints</span>
+            <p class="body">If you believe ThinkHere or its source code infringes your intellectual property rights,
+              please
+              contact us at <a href="/cdn-cgi/l/email-protection#610d0406000d2110000f0015000d0003124f020e0c"><span
+                  class="__cf_email__"
+                  data-cfemail="a8c4cdcfc9c4e8d9c9c6c9dcc9c4c9cadb86cbc7c5">[email&#160;protected]</span></a> with
+              details of
+              the claimed infringement. We will review and respond promptly.</p>
+          </div>
+
+          <!-- 11 -->
+          <div class="doc-section dark" id="s11">
+            <span class="section-number">11 — Privacy</span>
+            <h2 class="section-heading">How We Handle Your Data</h2>
+            <p class="body">ThinkHere does not store, receive, process, or retain the contents of your prompts, AI
+              responses,
+              uploaded files, or conversation history on Qanata Labs's servers. AI inference runs locally in your
+              browser on
+              your own device. Your account data — name, email, password hash, and preferences — is processed by Qanata
+              Labs
+              solely to enable sign-in, settings, and feature access.</p>
+            <p class="body">Our <a href="thinkhere-privacy-policy.html">Privacy Policy</a> sets out in full who the data
+              controller is, what data we collect, the legal bases for that collection, how long we retain it, and your
+              rights. The Privacy Policy is incorporated into these Terms by reference.</p>
+          </div>
+
+          <!-- 12 -->
+          <div class="doc-section" id="s12">
+            <span class="section-number">12 — Disclaimers</span>
+            <h2 class="section-heading">Limitations of AI Outputs</h2>
+            <p class="body">ThinkHere is provided on an "as is" and "as available" basis. We make no warranties
+              regarding the
+              accuracy, reliability, or completeness of AI-generated responses. AI outputs are not professional legal,
+              medical, financial, or other regulated advice. You are responsible for evaluating any AI-generated content
+              before acting on it.</p>
+            <p class="body">Because AI inference runs on your device, the quality and speed of responses depend on your
+              hardware. We cannot guarantee specific performance benchmarks across all devices.</p>
+          </div>
+
+          <!-- 13 -->
+          <div class="doc-section dark" id="s13">
+            <span class="section-number">13 — Limitation of Liability</span>
+            <h2 class="section-heading">Our Liability to You</h2>
+            <p class="body">To the maximum extent permitted by applicable law, Qanata Labs shall not be liable for
+              indirect,
+              incidental, special, consequential, or punitive damages arising from your use of ThinkHere. Our total
+              liability
+              for direct damages shall not exceed the amount you paid to us in the twelve months preceding the claim (or
+              £10
+              if you have not made any payment).</p>
+            <p class="body">Nothing in these Terms excludes or limits liability for death or personal injury caused by
+              our
+              negligence, fraud or fraudulent misrepresentation, or any other liability that cannot be excluded or
+              limited
+              under English law.</p>
+          </div>
+
+
+
+          <div class="doc-section" id="s14">
+            <span class="section-number">14 — Service &amp; Model Availability</span>
+            <h2 class="section-heading">Changes to the Service and Available Models</h2>
+            <p class="body">We may modify, suspend, or withdraw ThinkHere — or any part of it, including specific
+              models,
+              features, or browser support — temporarily or permanently, with or without notice. Reasons may include
+              maintenance, security incidents, legal requirements, third-party model publisher changes, or browser API
+              changes
+              outside our control.</p>
+            <p class="body">We will make reasonable efforts to give advance notice of material changes where possible.
+              However, if a third-party model publisher removes, restricts, or changes the licence terms for a model we
+              offer,
+              we may need to remove that model from ThinkHere without delay.</p>
+            <p class="body">We are not liable for any loss or inconvenience caused by modifications to or withdrawal of
+              features or models, provided we have acted reasonably.</p>
+          </div>
+
+
+
+          <div class="doc-section dark" id="s15">
+            <span class="section-number">15 — Beta and Experimental Features</span>
+            <h2 class="section-heading">Features That Are Still in Development</h2>
+            <p class="body">We may make beta, experimental, or preview features available from time to time. These
+              features
+              are provided "as is" without any guarantee of stability, accuracy, or continued availability. They may
+              behave
+              unexpectedly, change without notice, or be withdrawn at any time.</p>
+            <p class="body">This is particularly relevant for ThinkHere given its dependence on evolving browser
+              technologies
+              (WebGPU, Cache Storage) and third-party model formats. Browser updates or model changes may affect feature
+              behaviour in ways outside our control. Where a feature is experimental, we will indicate this clearly in
+              the
+              ThinkHere interface.</p>
+          </div>
+
+
+
+          <div class="doc-section" id="s16">
+            <span class="section-number">16 — Paid Tier Billing</span>
+            <h2 class="section-heading">Billing, Refunds, and Cancellation</h2>
+            <p class="body">The paid tier has not yet launched. Full billing terms — including pricing, billing cycles,
+              payment methods, taxes, refund policy, trial periods, and what happens on downgrade or cancellation — will
+              be
+              published before the paid tier becomes available. Those terms will form part of these Terms of Use at that
+              time.
+            </p>
+            <p class="body">Until the paid tier launches, this section serves as a placeholder. Nothing in the current
+              document creates a payment obligation.</p>
+          </div>
+
+          <!-- 17 -->
+          <div class="doc-section dark" id="s17">
+            <span class="section-number">17 — Modifications to These Terms</span>
+            <h2 class="section-heading">Changes to These Terms</h2>
+            <p class="body">We may update these Terms from time to time. We will notify users of material changes
+              through the
+              ThinkHere interface or by email. Continued use after the effective date of updated Terms constitutes
+              acceptance.
+            </p>
+          </div>
+
+          <!-- 18 -->
+          <div class="doc-section" id="s18">
+            <span class="section-number">18 — Termination</span>
+            <h2 class="section-heading">Ending Your Use</h2>
+            <p class="body">You may stop using ThinkHere and delete your account at any time via account settings. We
+              may
+              suspend or terminate your account for violations of these Terms or our Usage Policies.</p>
+            <p class="body">On account deletion, your account data will be deleted within 30 days, subject to any data
+              we are
+              required to retain for legal, regulatory, or fraud-prevention purposes. Because your conversation data is
+              stored
+              only in your browser, it is unaffected by account deletion and remains under your control.</p>
+          </div>
+
+          <!-- 19 -->
+          <div class="doc-section dark" id="s19">
+            <span class="section-number">19 — Governing Law</span>
+            <h2 class="section-heading">Jurisdiction</h2>
+            <p class="body">These Terms are governed by the laws of England and Wales. Disputes shall be subject to the
+              exclusive jurisdiction of the courts of England and Wales, unless local mandatory consumer protection law
+              requires otherwise.</p>
+          </div>
+
+          <!-- 20 -->
+          <div class="doc-section" id="s20">
+            <span class="section-number">20 — Contact</span>
+            <h2 class="section-heading">Get in Touch</h2>
+            <p class="body">Questions about these Terms:</p>
+            <div class="contact-card">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <rect x="1" y="3" width="14" height="10" rx="1" stroke="#b85c38" stroke-width="1.3" />
+                <path d="M1 4l7 5 7-5" stroke="#b85c38" stroke-width="1.3" />
+              </svg>
+              <a href="/cdn-cgi/l/email-protection#a1cdc4c6c0cde1d0c0cfc0d5c0cdc0c3d28fc2cecc"><span
+                  class="__cf_email__"
+                  data-cfemail="ff939a989e93bf8e9e919e8b9e939e9d8cd19c9092">[email&#160;protected]</span></a>
+            </div>
+
+
+
+          </div>
+        </div>
+
+        <div class="footer-trust">
+          <span class="trust-pill">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            Secure
+          </span>
+          <span class="trust-dot"></span>
+          <span class="trust-pill">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            Private
+          </span>
+          <span class="trust-dot"></span>
+          <span class="trust-pill">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4l3 3" />
+            </svg>
+            Confidential
+          </span>
+        </div>
+        <p class="legal" style="padding-bottom:24px;">
+          By using ThinkHere you agree to our <a href="terms.html">Terms of Use</a>, <a href="privacy.html">Privacy
+            Policy</a> and <a href="usage.html">Usage Policies</a> &middot; A <a href="https://www.qanatalabs.com"
+            target="_blank" rel="noopener">Qanata Labs</a> product
+        </p>
+
+      </div>
+      <script>
+        function setTheme(t) {
+          document.documentElement.setAttribute('data-theme', t);
+          document.getElementById('btn-dark').classList.toggle('active', t === 'dark');
+          document.getElementById('btn-light').classList.toggle('active', t === 'light');
+          var strokeCol = t === 'light' ? '#9a9a9a' : '#f4f1eb';
+          document.querySelectorAll('.ql-stroke').forEach(function (el) { el.setAttribute('stroke', strokeCol); });
+          localStorage.setItem('thinkhere-theme', t);
+        }
+        (function () {
+          var saved = localStorage.getItem('thinkhere-theme');
+          if (saved) setTheme(saved);
+        })();
+      </script>
+      <script type="module" src="js/auth.js"></script>
 </body>
 
 </html>

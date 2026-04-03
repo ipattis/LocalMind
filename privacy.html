@@ -5,194 +5,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy — ThinkHere</title>
-  <meta name="description" content="ThinkHere Privacy Policy.">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
+    /* Specific page style overrides */
     .page-wrap {
-      max-width: 1020px;
-      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      min-height: 100dvh;
+      min-height: 100vh;
     }
 
     .page-header {
-      padding: 20px 24px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      background: var(--topbar-bg);
-      backdrop-filter: blur(12px);
-    }
-
-    .page-header-logo {
-      font-family: var(--font-sans);
-      font-weight: 700;
-      font-size: 1.25rem;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .page-header-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .page-nav {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-dim);
-      text-decoration: none;
-      letter-spacing: 0.03em;
-      transition: color 0.2s ease;
-    }
-
-    .page-nav:hover {
-      color: var(--accent);
-    }
-
-    .page-content {
-      flex: 1;
-      padding: 0 24px;
-      overflow-y: auto;
-    }
-
-    .legal-doc {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 64px 0 80px;
-    }
-
-    .legal-doc .doc-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 16px;
-    }
-
-    .legal-doc h1 {
-      font-family: var(--font-sans);
-      font-size: 2.4rem;
-      font-weight: 300;
-      letter-spacing: -0.025em;
-      color: var(--hero-h);
-      margin-bottom: 8px;
-      line-height: 1.2;
-    }
-
-    .legal-doc .effective-date {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--text-dim);
-      margin-bottom: 48px;
-    }
-
-    .legal-doc h2 {
-      font-family: var(--font-sans);
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-      margin: 40px 0 12px;
-      letter-spacing: -0.01em;
-    }
-
-    .legal-doc p {
-      color: var(--text-muted);
-      font-size: 0.92rem;
-      line-height: 1.75;
-      margin-bottom: 16px;
-    }
-
-    .legal-doc a {
-      color: var(--accent);
-      text-decoration: underline;
-    }
-
-    .legal-doc a:hover {
-      color: var(--text);
-    }
-
-    .privacy-highlight {
-      background: var(--surface);
-      border: 1px solid var(--border-md);
-      border-left: 3px solid var(--accent);
-      border-radius: 0 10px 10px 0;
-      padding: 16px 20px;
-      margin: 24px 0;
-    }
-
-    .privacy-highlight p {
-      margin-bottom: 0;
-      font-size: 0.9rem;
-    }
-
-    .page-footer {
-      padding: 24px;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--text-dim);
-      letter-spacing: 0.04em;
-    }
-
-    .page-theme-toggle {
-      display: flex;
-      align-items: center;
-      background: var(--surface2);
-      border: 1px solid var(--border-md);
-      border-radius: 20px;
-      padding: 3px;
-    }
-
-    .page-theme-btn {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 10px;
-      border-radius: 16px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-family: var(--font-sans);
-      font-size: 11px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.18s;
-    }
-
-    .page-theme-btn.active {
-      background: var(--surface);
-      color: var(--text);
-      box-shadow: 0 1px 4px var(--shadow);
-    }
-
-    @media (max-width: 600px) {
-      .page-header-right {
-        gap: 8px;
-      }
-
-      .page-nav {
-        display: none;
-      }
-
-      .legal-doc h1 {
-        font-size: 1.8rem;
-      }
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
   </style>
 </head>
@@ -214,7 +42,7 @@
       <div class="page-header-right">
         <a class="page-nav" href="about.html">About</a>
         <a class="page-nav" href="blog.html">Blog</a>
-        <a class="page-nav" href="guide.html">Guide</a>
+        <a class="page-nav" class="page-nav" href="guide.html">Guide</a>
         <div class="page-theme-toggle">
           <button class="page-theme-btn active" id="btn-dark" onclick="setTheme('dark')">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
@@ -231,134 +59,447 @@
             </svg>
           </button>
         </div>
+        <a class="btn-top-ghost" href="#" onclick="signIn(); return false;">Sign In</a>
+        <a class="btn-top-solid" href="https://app.thinkhere.ai/?mode=signup">Create Account</a>
       </div>
     </header>
+    <div class="legal-layout">
+      <div class="doc-nav">
+        <div class="nav-doc-title">Privacy Policy</div>
+        <ul>
+          <li><a href="#s1">Architecture</a></li>
+          <li><a href="#s2">Controller &amp; Bases</a></li>
+          <li><a href="#s3">What We Collect</a></li>
+          <li><a href="#s4">What We Don't Collect</a></li>
+          <li><a href="#s5">How We Use Data</a></li>
+          <li><a href="#s6">Cookies &amp; Local Storage</a></li>
+          <li><a href="#s7">Data Sharing &amp; Subprocessors</a></li>
+          <li><a href="#s8">International Transfers</a></li>
+          <li><a href="#s9">Data Retention</a></li>
+          <li><a href="#s10">Your Rights</a></li>
+          <li><a href="#s11">Children &amp; Minors</a></li>
+          <li><a href="#s12">Security</a></li>
+          <li><a href="#s13">Open Source</a></li>
+          <li><a href="#s14">Changes</a></li>
+          <li><a href="#s15">Contact</a></li>
+        </ul>
+        <div class="nav-divider"></div>
+        <div class="nav-other-label">Other Documents</div>
+        <ul class="nav-other">
+          <li><a href="thinkhere-terms-of-use.html">Terms of Use</a></li>
+          <li><a href="thinkhere-usage-policies.html">Usage Policies</a></li>
+        </ul>
+      </div>
 
-    <div class="page-content">
-      <div class="legal-doc">
-        <div class="doc-eyebrow">Legal</div>
-        <h1>Privacy Policy</h1>
-        <p class="effective-date">Effective date: March 2026</p>
-
-        <div class="privacy-highlight">
-          <p><strong>The short version:</strong> ThinkHere runs AI entirely in your browser. Your conversations,
-            documents, and model outputs never leave your device. We do not collect, transmit, or store your AI
-            interactions.</p>
+      <div class="doc-main">
+        <div class="legal-cover">
+          <div class="cover-grain"></div>
+          <div class="cover-label">ThinkHere · Legal</div>
+          <h1 class="cover-title">Privacy <em>Policy</em></h1>
+          <div class="cover-meta">
+            <span>Effective 27 March 2026</span>
+            <span>Local-first · Zero server inference</span>
+            <span>Governed by English &amp; Welsh Law (UK GDPR)</span>
+          </div>
         </div>
 
-        <h2>1. Who We Are</h2>
-        <p>ThinkHere is a product of Qanata Labs. This policy describes how we handle information in connection with the
-          ThinkHere service at <a href="https://thinkhere.ai">thinkhere.ai</a> and <a
-            href="https://app.thinkhere.ai">app.thinkhere.ai</a>.</p>
+        <div class="notice-banner">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 1.667L2.5 5v5c0 4.583 3.208 8.875 7.5 9.833 4.292-.958 7.5-5.25 7.5-9.833V5L10 1.667z"
+              stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+          </svg>
+          <p><strong>We cannot read your conversations because they never reach us.</strong> ThinkHere runs AI entirely
+            on your device. The only personal data we process is what is strictly needed for account management and
+            operating the service.</p>
+        </div>
 
-        <h2>2. Data That Never Leaves Your Device</h2>
-        <p>The core function of ThinkHere — AI inference — happens entirely in your browser using WebGPU. The following
-          is processed and stored only on your device and is never transmitted to us:</p>
-        <p>— Conversation messages and AI responses<br>
-          — Uploaded documents and knowledge base content<br>
-          — Model files (cached in your browser's Cache API)<br>
-          — Conversation history (stored in IndexedDB)<br>
-          — Settings and preferences (stored in localStorage)</p>
-        <p>We have no technical capability to access any of this data. Clearing your browser's site data permanently
-          deletes it.</p>
+        <p class="intro-para">This Privacy Policy explains how Qanata Labs processes personal data in connection with
+          your use of ThinkHere, why we are entitled to do so, and what rights you have.</p>
 
-        <h2>3. Account Information (app.thinkhere.ai)</h2>
-        <p>If you create an account at <a href="https://app.thinkhere.ai">app.thinkhere.ai</a>, we collect and store:
-        </p>
-        <p>— Your email address<br>
-          — A hashed password (managed by AWS Cognito — we never see your plaintext password)<br>
-          — Your subscription status and billing history</p>
-        <p>This information is used solely to authenticate you and manage your subscription. It is stored securely using
-          AWS Cognito and our backend services.</p>
+        <div class="doc-section dark" id="s1">
+          <span class="section-number">01 — Architecture</span>
+          <h2 class="section-heading">How ThinkHere Handles Your Conversations</h2>
+          <p class="body">ThinkHere runs the AI model entirely in your browser using WebGPU. Your prompts and the AI's
+            responses are never transmitted over the network to Qanata Labs or any third party. They are stored only in
+            your browser's local storage, on your device, under your control.</p>
+          <p class="body">This is not a policy promise layered over a server-side system — it is the technical reality
+            of how ThinkHere is built. We have no ability to access your conversations regardless of which tier you use.
+          </p>
+          <p class="body">The two data worlds are completely separate:</p>
+          <div class="bucket-grid">
+            <div class="bucket no">
+              <div class="bucket-label">Never on our servers</div>
+              <ul>
+                <li>Your prompts</li>
+                <li>AI responses</li>
+                <li>Uploaded file contents</li>
+                <li>Conversation history</li>
+                <li>Knowledge base content</li>
+              </ul>
+            </div>
+            <div class="bucket yes">
+              <div class="bucket-label">May reach our servers</div>
+              <ul>
+                <li>Account name &amp; email</li>
+                <li>Password (hashed)</li>
+                <li>Preferences &amp; settings</li>
+                <li>Model download logs (IP, UA, timestamp)</li>
+                <li>De-identified telemetry</li>
+                <li>Crash reports (no content)</li>
+              </ul>
+            </div>
 
-        <h2>4. Payment Information</h2>
-        <p>Payments are processed by <a href="https://stripe.com" target="_blank" rel="noopener">Stripe</a>. We do not
-          store credit card numbers or payment details. Stripe provides us with subscription status and a customer
-          identifier. Stripe's privacy policy governs their handling of your payment information.</p>
 
-        <h2>5. Analytics and Tracking</h2>
-        <p>ThinkHere does not use advertising trackers, third-party analytics services, or fingerprinting. We do not use
-          cookies for tracking. We may collect basic, anonymised server-level access logs (IP address, page requested,
-          timestamp) for operational purposes only. These logs are retained for a short period and are not used for
-          profiling or advertising.</p>
+            <div class="doc-section" id="s2">
+              <span class="section-number">02 — Controller &amp; Lawful Basis</span>
+              <h2 class="section-heading">Who We Are and Why We Can Process Your Data</h2>
+              <span class="sub-label">Data controller</span>
+              <p class="body">The data controller for personal data processed in connection with ThinkHere is
+                <strong>Qanata Labs</strong>, the company that develops and operates ThinkHere. You can contact us at <a
+                  href="/cdn-cgi/l/email-protection#2a5a58435c4b49536a5b4b444b5e4b464b485904494547"><span
+                    class="__cf_email__"
+                    data-cfemail="2252504b5443415b6253434c4356434e4340510c414d4f">[email&#160;protected]</span></a>.</p>
+              <span class="sub-label">Lawful bases under UK GDPR</span>
+              <p class="body">We process personal data only where we have a lawful basis to do so. The table below sets
+                out each processing activity and the basis we rely on:</p>
+              <table class="basis-table">
+                <tr>
+                  <th>Processing activity</th>
+                  <th>Lawful basis</th>
+                </tr>
+                <tr>
+                  <td>Creating and managing your account (name, email, password hash)</td>
+                  <td>Performance of a contract — necessary to provide the account-based service you have requested</td>
+                </tr>
+                <tr>
+                  <td>Sending service notices and security alerts</td>
+                  <td>Performance of a contract / Legitimate interests — keeping you informed about the service you use
+                  </td>
+                </tr>
+                <tr>
+                  <td>Logging server access data during model downloads (IP address, browser user agent, timestamp, file
+                    requested)</td>
+                  <td>Legitimate interests — security monitoring, CDN optimisation, and abuse prevention; this data is
+                    not linked to conversation content</td>
+                </tr>
+                <tr>
+                  <td>Collecting de-identified operational telemetry (browser type, OS, model load success/failure)</td>
+                  <td>Legitimate interests — improving ThinkHere's reliability and compatibility; telemetry is
+                    de-identified before storage</td>
+                </tr>
+                <tr>
+                  <td>Collecting crash and error reports (technical details, no conversation content)</td>
+                  <td>Legitimate interests — diagnosing and fixing faults in the service</td>
+                </tr>
+                <tr>
+                  <td>Retaining records for legal or regulatory compliance</td>
+                  <td>Legal obligation — where applicable law requires us to retain data</td>
+                </tr>
+              </table>
+              <span class="sub-label">No automated decision-making</span>
+              <p class="body">We do not subject you to automated decision-making or profiling that produces legal or
+                similarly significant effects.</p>
+            </div>
 
-        <h2>6. Third-Party Services</h2>
-        <p>ThinkHere uses the following third-party services in the operation of app.thinkhere.ai:</p>
-        <p>— <strong>AWS Cognito</strong> — user authentication<br>
-          — <strong>AWS Lambda / API Gateway</strong> — subscription management backend<br>
-          — <strong>Stripe</strong> — payment processing<br>
-          — <strong>Amazon CloudFront / S3</strong> — static asset delivery</p>
-        <p>Model weights are downloaded from <a href="https://huggingface.co" target="_blank" rel="noopener">Hugging
-            Face</a> directly to your browser on first use. Runtime libraries are loaded from <a
-            href="https://cdn.jsdelivr.net" target="_blank" rel="noopener">jsDelivr</a>. Neither service receives your
-          prompts or model outputs.</p>
 
-        <h2>7. Your Rights</h2>
-        <p>You may request deletion of your account and any associated data at any time by emailing <a
-            href="mailto:contact@qanatalabs.com">contact@qanatalabs.com</a>. Because conversation data lives only on
-          your device, deleting your account deletes the only data we hold — your email, authentication credentials, and
-          subscription record.</p>
 
-        <h2>8. Children</h2>
-        <p>ThinkHere is not directed at children under 13. We do not knowingly collect personal information from
-          children. If you believe a child has provided us with personal information, please contact us and we will
-          delete it promptly.</p>
+            <div class="doc-section dark" id="s3">
+              <span class="section-number">03 — What We Collect</span>
+              <h2 class="section-heading">The Data We Do Process</h2>
+              <span class="sub-label">3.1 — Account information (if you register)</span>
+              <p class="body">If you create a free account, we collect your name and email address, your password
+                (stored as a secure one-way hash — we never store or can recover your plaintext password), and your
+                preferences and settings. Your account does not store or sync your conversations; it manages feature
+                access and preferences only.</p>
+              <span class="sub-label">3.2 — Model weight download logs</span>
+              <p class="body">When you load a model for the first time, the model weights are downloaded from our
+                servers via a standard HTTPS request. We may log standard server access data — IP address, browser user
+                agent, timestamp, and file requested — for security monitoring and CDN optimisation. This data is not
+                linked to your conversations or your account unless required for a specific security investigation.
+                These logs are retained for up to 90 days.</p>
+              <span class="sub-label">3.3 — De-identified operational telemetry</span>
+              <p class="body">We may collect limited operational telemetry to help us improve ThinkHere — such as which
+                browser and OS you are using, whether a model loaded successfully, and general feature interaction
+                signals. "De-identified" means we remove or minimise direct identifiers before storage; however, some
+                operational data (such as an IP address present in a CDN log) may still constitute personal data under
+                UK GDPR, and we treat it as such. We never include conversation content in telemetry. Telemetry data is
+                retained for up to 90 days.</p>
+              <span class="sub-label">3.4 — Crash and error reports</span>
+              <p class="body">If ThinkHere encounters a technical error, we may collect a crash report containing
+                details about the error and the browser/device environment. These reports do not include conversation
+                content, prompts, or AI responses.</p>
+            </div>
 
-        <h2>9. Changes to This Policy</h2>
-        <p>We may update this policy as the service evolves. We will update the effective date at the top of this page.
-          Material changes will be communicated where possible.</p>
 
-        <h2>10. Contact</h2>
-        <p>Privacy questions or requests? Email us at <a
-            href="mailto:contact@qanatalabs.com">contact@qanatalabs.com</a>.</p>
-      </div>
-    </div>
 
-    <div class="footer-trust">
-      <span class="trust-pill">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        </svg>
-        Secure
-      </span>
-      <span class="trust-dot"></span>
-      <span class="trust-pill">
-        <svg viewBox="0 0 24 24">
-          <rect x="3" y="11" width="18" height="11" rx="2" />
-          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-        </svg>
-        Private
-      </span>
-      <span class="trust-dot"></span>
-      <span class="trust-pill">
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 8v4l3 3" />
-        </svg>
-        Confidential
-      </span>
-    </div>
-    <p class="legal">
-      By using ThinkHere you agree to our <a href="https://thinkhere.ai/terms.html">Terms of Use</a> and <a
-        href="https://thinkhere.ai/privacy.html">Privacy Policy</a> &middot; A <a href="https://www.qanatalabs.com"
-        target="_blank" rel="noopener">Qanata Labs</a> product
-    </p>
-  </div>
+            <div class="doc-section" id="s4">
+              <span class="section-number">04 — What We Don't Collect</span>
+              <h2 class="section-heading">Data We Never See</h2>
+              <div class="never-box">
+                <div class="never-box-label">Never collected by Qanata Labs</div>
+                <ul>
+                  <li>Your prompts or AI responses</li>
+                  <li>Conversation history or transcripts</li>
+                  <li>Uploaded file contents</li>
+                  <li>Knowledge base content</li>
+                  <li>Any content used to train AI models</li>
+                  <li>Data sold to third parties for any purpose</li>
+                  <li>Advertising or behavioural tracking data</li>
+                </ul>
+              </div>
+              <p class="body">ThinkHere does not use advertising cookies, third-party trackers, or any analytics tool
+                that sends conversation content off-device.</p>
+            </div>
 
-  <script>
-    function setTheme(t) {
-      document.documentElement.setAttribute('data-theme', t);
-      document.getElementById('btn-dark').classList.toggle('active', t === 'dark');
-      document.getElementById('btn-light').classList.toggle('active', t === 'light');
-      var strokeCol = t === 'light' ? '#9a9a9a' : '#f4f1eb';
-      document.querySelectorAll('.ql-stroke').forEach(function (el) { el.setAttribute('stroke', strokeCol); });
-      localStorage.setItem('thinkhere-theme', t);
-    }
-    (function () {
-      var saved = localStorage.getItem('thinkhere-theme');
-      if (saved) setTheme(saved);
-    })();
-  </script>
+
+
+            <div class="doc-section dark" id="s5">
+              <span class="section-number">05 — How We Use Data</span>
+              <h2 class="section-heading">What We Do With What We Collect</h2>
+              <p class="body">We use account information and operational data only for the purposes set out in the
+                lawful basis table in Section 2:</p>
+              <ul class="doc-list">
+                <li>Providing, operating, and authenticating your account</li>
+                <li>Delivering model weights to your browser on first load</li>
+                <li>Monitoring service reliability and diagnosing technical problems</li>
+                <li>Improving ThinkHere's performance and browser compatibility</li>
+                <li>Sending important service notices (not marketing, unless you opt in)</li>
+                <li>Complying with legal obligations</li>
+              </ul>
+              <p class="body">We do not use any data to train AI models. We do not use any data for advertising. We do
+                not sell personal data.</p>
+            </div>
+
+
+
+            <div class="doc-section" id="s6">
+              <span class="section-number">06 — Cookies &amp; Local Storage</span>
+              <h2 class="section-heading">What Lives in Your Browser</h2>
+              <p class="body">ThinkHere uses cookies strictly for session management and authentication (to keep you
+                signed in). We do not use tracking, advertising, or analytics cookies.</p>
+              <p class="body">ThinkHere also makes extensive use of browser-local storage mechanisms — specifically the
+                browser's Local Storage API and Cache Storage API — to store your conversation history and cached model
+                weights respectively. These are not cookies: they are browser-native storage areas that exist only on
+                your device and are not accessible to us. You can clear them at any time through your browser settings
+                or the controls in ThinkHere's interface.</p>
+            </div>
+
+
+
+            <div class="doc-section dark" id="s7">
+              <span class="section-number">07 — Data Sharing &amp; Subprocessors</span>
+              <h2 class="section-heading">Who Else May Process Your Account Data</h2>
+              <p class="body">We do not sell personal data. We share limited account and operational data only with the
+                following categories of subprocessor, each engaged under a data processing agreement that restricts them
+                to processing data only on our instructions:</p>
+              <ul class="doc-list">
+                <li><strong>Cloud infrastructure and hosting providers</strong> — for account data storage and
+                  authentication services</li>
+                <li><strong>CDN providers</strong> — for delivery of model weight files; these providers may log
+                  standard HTTPS request metadata (IP, user agent, timestamp) as part of normal CDN operation</li>
+                <li><strong>Error and crash reporting tools</strong> — for collecting technical error reports that do
+                  not include conversation content</li>
+              </ul>
+              <p class="body">We will maintain an up-to-date list of current subprocessors at <a
+                  href="https://thinkhere.ai/subprocessors">thinkhere.ai/subprocessors</a>. We will notify users of
+                material subprocessor changes in advance where those changes affect how account data is processed.</p>
+              <p class="body">We may also disclose data to law enforcement or regulatory authorities where required by
+                applicable law, or to a successor entity in the event of a merger or acquisition — in which case we will
+                notify you in advance.</p>
+            </div>
+
+
+
+            <div class="doc-section" id="s8">
+              <span class="section-number">08 — International Transfers</span>
+              <h2 class="section-heading">Where Your Data Is Processed</h2>
+              <p class="body">Qanata Labs is based in the United Kingdom. Account data and operational logs are
+                processed in the UK and, where subprocessors are used, potentially in the European Economic Area or
+                other countries.</p>
+              <p class="body">Where we transfer personal data outside the UK or EEA, we ensure an appropriate safeguard
+                is in place — such as the UK International Data Transfer Agreement (IDTA), the EU Standard Contractual
+                Clauses (SCCs), or a transfer to a country that the UK has recognised as providing adequate protection.
+              </p>
+              <p class="body">Because your conversation data never leaves your device, it is not subject to any
+                international transfer by us.</p>
+            </div>
+
+
+
+            <div class="doc-section dark" id="s9">
+              <span class="section-number">09 — Data Retention</span>
+              <h2 class="section-heading">How Long We Keep Data</h2>
+              <p class="body">Account data (name, email, preferences) is retained for as long as your account is active.
+                You may delete your account at any time via account settings. We will delete your account data within 30
+                days of a deletion request, subject to the exceptions below.</p>
+              <p class="body">Server access logs from model downloads are retained for up to 90 days for security and
+                CDN purposes, then deleted.</p>
+              <p class="body">We may retain certain data beyond the 30-day period where we are required to do so by law
+                or regulation — for example, financial and billing records once a paid tier is live, fraud-prevention
+                logs, or records subject to a legal hold. We will only retain the minimum data necessary for each such
+                purpose.</p>
+              <p class="body">Your conversation history and cached model weights are stored in your browser only. We
+                cannot access or delete them remotely. You control this data entirely through your browser settings.</p>
+            </div>
+
+
+
+            <div class="doc-section" id="s10">
+              <span class="section-number">10 — Your Rights</span>
+              <h2 class="section-heading">Rights Over Your Personal Data</h2>
+              <p class="body">Under UK GDPR, you have the following rights in relation to personal data we hold about
+                you:</p>
+              <ul class="doc-list">
+                <li><strong>Access</strong> — request a copy of the personal data we hold about you</li>
+                <li><strong>Correction</strong> — request that we correct inaccurate or incomplete data</li>
+                <li><strong>Erasure</strong> — request deletion of your personal data, subject to legal retention
+                  obligations</li>
+                <li><strong>Portability</strong> — receive your account data in a structured, machine-readable format
+                </li>
+                <li><strong>Restriction</strong> — ask us to restrict processing in certain circumstances</li>
+                <li><strong>Objection</strong> — object to processing based on legitimate interests</li>
+                <li><strong>Withdraw consent</strong> — where processing is based on consent, withdraw it at any time
+                  without affecting prior processing</li>
+              </ul>
+              <p class="body">To exercise any of these rights, contact us at <a
+                  href="/cdn-cgi/l/email-protection#a0d0d2c9d6c1c3d9e0d1c1cec1d4c1ccc1c2d38ec3cfcd"><span
+                    class="__cf_email__"
+                    data-cfemail="2c5c5e455a4d4f556c5d4d424d584d404d4e5f024f4341">[email&#160;protected]</span></a>. We
+                will respond within one month. If you are based in the UK, you also have the right to lodge a complaint
+                with the Information Commissioner's Office (ICO) at <a href="https://ico.org.uk" target="_blank"
+                  rel="noopener">ico.org.uk</a>.</p>
+            </div>
+
+
+
+            <div class="doc-section dark" id="s11">
+              <span class="section-number">11 — Children &amp; Minors</span>
+              <h2 class="section-heading">Age Requirements and Parental Consent</h2>
+              <p class="body">ThinkHere is not directed at children under 13. We do not knowingly collect personal data
+                from users under 13. If we become aware that a user under 13 has created an account, we will close the
+                account and delete their data promptly.</p>
+              <p class="body">Users aged 13 and under 18 may use ThinkHere with the consent of a parent or legal
+                guardian, as set out in our <a href="thinkhere-terms-of-use.html">Terms of Use</a>. If a parent or
+                guardian believes their child under 13 has provided personal data, please contact us at <a
+                  href="mailto:privacy@qanatalabs.com">privacy@qanatalabs.com</a> and we will delete it without delay.
+              </p>
+            </div>
+
+
+
+            <div class="doc-section" id="s12">
+              <span class="section-number">12 — Security</span>
+              <h2 class="section-heading">How We Protect Data</h2>
+              <p class="body">Account data and operational logs are protected with industry-standard encryption in
+                transit (TLS) and at rest. Access to personal data is restricted to authorised personnel on a
+                need-to-know basis. We conduct regular security assessments and address vulnerabilities promptly.</p>
+              <p class="body">Because your conversation data never leaves your browser, it is not exposed to server-side
+                security risks. Model weight downloads are served over HTTPS. If you discover a security vulnerability
+                in ThinkHere, please report it responsibly to <a
+                  href="/cdn-cgi/l/email-protection#4635232533342f323f063727282732272a2724356825292b"><span
+                    class="__cf_email__"
+                    data-cfemail="0f7c6a6c7a7d667b764f7e6e616e7b6e636e6d7c216c6062">[email&#160;protected]</span></a>.
+              </p>
+            </div>
+
+
+
+            <div class="doc-section dark" id="s13">
+              <span class="section-number">13 — Open Source</span>
+              <h2 class="section-heading">Verifiable by Anyone</h2>
+              <p class="body">ThinkHere is open source under the MIT licence. Our privacy practices are reflected in the
+                public codebase. Anyone can inspect the source code to verify how data flows within the application and
+                confirm that conversations are processed locally.</p>
+            </div>
+
+
+
+            <div class="doc-section" id="s14">
+              <span class="section-number">14 — Changes to This Policy</span>
+              <h2 class="section-heading">Updates</h2>
+              <p class="body">We may update this Privacy Policy from time to time. We will notify you of material
+                changes via the ThinkHere interface or by email before they take effect. The current version is always
+                available at <a href="https://thinkhere.ai/privacy">thinkhere.ai/privacy</a>. Continued use after the
+                effective date of an updated policy constitutes acceptance.</p>
+            </div>
+
+
+
+            <div class="doc-section dark" id="s15">
+              <span class="section-number">15 — Contact</span>
+              <h2 class="section-heading">Get in Touch</h2>
+              <p class="body">Privacy questions, data rights requests, or concerns:</p>
+              <div class="contact-card">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <rect x="1" y="3" width="14" height="10" rx="1" stroke="#b85c38" stroke-width="1.3" />
+                  <path d="M1 4l7 5 7-5" stroke="#b85c38" stroke-width="1.3" />
+                </svg>
+                <a href="/cdn-cgi/l/email-protection#61111308170002182110000f0015000d0003124f020e0c"><span
+                    class="__cf_email__"
+                    data-cfemail="5a2a28332c3b39231a2b3b343b2e3b363b382974393537">[email&#160;protected]</span></a>
+              </div>
+              <p class="body" style="margin-top:20px;">To report a security vulnerability:</p>
+              <div class="contact-card">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <rect x="1" y="3" width="14" height="10" rx="1" stroke="#b85c38" stroke-width="1.3" />
+                  <path d="M1 4l7 5 7-5" stroke="#b85c38" stroke-width="1.3" />
+                </svg>
+                <a href="/cdn-cgi/l/email-protection#93e0f6f0e6e1fae7ead3e2f2fdf2e7f2fff2f1e0bdf0fcfe"><span
+                    class="__cf_email__"
+                    data-cfemail="7003151305021904093001111e1104111c1112035e131f1d">[email&#160;protected]</span></a>
+              </div>
+
+
+
+            </div>
+          </div>
+
+          <div class="footer-trust">
+            <span class="trust-pill">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              Secure
+            </span>
+            <span class="trust-dot"></span>
+            <span class="trust-pill">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              Private
+            </span>
+            <span class="trust-dot"></span>
+            <span class="trust-pill">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 8v4l3 3" />
+              </svg>
+              Confidential
+            </span>
+          </div>
+          <p class="legal" style="padding-bottom:24px;">
+            By using ThinkHere you agree to our <a href="terms.html">Terms of Use</a>, <a href="privacy.html">Privacy
+              Policy</a> and <a href="usage.html">Usage Policies</a> &middot; A <a href="https://www.qanatalabs.com"
+              target="_blank" rel="noopener">Qanata Labs</a> product
+          </p>
+
+        </div>
+        <script>
+          function setTheme(t) {
+            document.documentElement.setAttribute('data-theme', t);
+            document.getElementById('btn-dark').classList.toggle('active', t === 'dark');
+            document.getElementById('btn-light').classList.toggle('active', t === 'light');
+            var strokeCol = t === 'light' ? '#9a9a9a' : '#f4f1eb';
+            document.querySelectorAll('.ql-stroke').forEach(function (el) { el.setAttribute('stroke', strokeCol); });
+            localStorage.setItem('thinkhere-theme', t);
+          }
+          (function () {
+            var saved = localStorage.getItem('thinkhere-theme');
+            if (saved) setTheme(saved);
+          })();
+        </script>
+        <script type="module" src="js/auth.js"></script>
 </body>
 
 </html>

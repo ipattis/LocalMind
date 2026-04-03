@@ -1,429 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guide — ThinkHere | Private AI in Your Browser</title>
-  <meta name="description"
-    content="Documentation for ThinkHere. Getting started, feature tiers, device requirements, and available models.">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>Guide — ThinkHere</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* ── Docs Page Styles ── */
-    .page-wrap {
-      max-width: 860px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      min-height: 100dvh;
-    }
+    /* Specific page style overrides */
+    .page-wrap { display: flex; flex-direction: column; min-height: 100vh; }
+    .page-header { position: sticky; top: 0; z-index: 100; }
+    
+    html { scroll-behavior: smooth; }
 
-    /* Top nav for content pages */
-    .page-header {
-      padding: 20px 24px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      background: var(--topbar-bg);
-      backdrop-filter: blur(12px);
-    }
-
-    .page-header-logo {
-      font-family: var(--font-sans);
-      font-weight: 700;
-      font-size: 1.25rem;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .page-header-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .page-nav {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-dim);
-      text-decoration: none;
-      letter-spacing: 0.03em;
-      transition: color 0.2s ease;
-    }
-
-    .page-nav:hover {
-      color: var(--accent);
-    }
-
-    .page-content {
-      flex: 1;
-      padding: 0 24px;
-      overflow-y: auto;
-    }
-
-    /* Theme toggle for content pages */
-    .page-theme-toggle {
-      display: flex;
-      align-items: center;
-      background: var(--surface2);
-      border: 1px solid var(--border-md);
-      border-radius: 20px;
-      padding: 3px;
-    }
-
-    .page-theme-btn {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 10px;
-      border-radius: 16px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-family: var(--font-sans);
-      font-size: 11px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.18s;
-    }
-
-    .page-theme-btn.active {
-      background: var(--surface);
-      color: var(--text);
-      box-shadow: 0 1px 4px var(--shadow);
-    }
-
-    /* Docs header */
-    .docs-header {
-      padding: 60px 0 40px;
-      text-align: center;
-    }
-
-    .docs-header h1 {
-      font-family: var(--font-sans);
-      font-size: 2.2rem;
-      font-weight: 300;
-      margin-bottom: 12px;
-      letter-spacing: -0.02em;
-      color: var(--hero-h);
-    }
-
-    .docs-header p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-
-    /* Sections */
-    .docs-section {
-      margin-bottom: 56px;
-    }
-
-    .docs-section h2 {
-      font-family: var(--font-sans);
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-      color: var(--hero-h);
-    }
-
-    .docs-section h3 {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--accent);
-      letter-spacing: 0.03em;
-      margin: 24px 0 12px;
-    }
-
-    .docs-section p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      line-height: 1.7;
-      margin-bottom: 14px;
-    }
-
-    .docs-section ul {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      line-height: 1.7;
-      margin: 0 0 14px 20px;
-    }
-
-    .docs-section li {
-      margin-bottom: 6px;
-    }
-
-    .docs-section strong {
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    /* Getting started steps */
-    .steps {
-      display: flex;
-      gap: 16px;
-      margin: 20px 0;
-      flex-wrap: wrap;
-    }
-
-    .step {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      flex: 1;
-      min-width: 160px;
-    }
-
-    .step-num {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--accent);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .step-text {
-      font-size: 0.85rem;
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    /* Tier comparison table */
-    .tier-table-wrap {
-      overflow-x: auto;
-      margin: 20px 0;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-    }
-
-    .tier-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-      min-width: 560px;
-    }
-
-    .tier-table thead {
-      background: var(--surface2);
-    }
-
-    .tier-table th {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text);
-      padding: 14px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .tier-table th:not(:first-child) {
-      text-align: center;
-    }
-
-    .tier-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text-muted);
-    }
-
-    .tier-table td:not(:first-child) {
-      text-align: center;
-    }
-
-    .tier-table tbody tr:last-child td {
-      border-bottom: none;
-    }
-
-    .tier-table tbody tr:hover {
-      background: var(--surface);
-    }
-
-    .tier-table .feature-name {
-      font-weight: 500;
-      color: var(--text);
-    }
-
-    /* Checkmark and dash */
-    .check {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: rgba(184, 92, 56, 0.12);
-      color: var(--accent);
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-
-    .dash {
-      color: var(--text-dim);
-      font-size: 1rem;
-    }
-
-    /* Device requirements */
-    .req-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      margin: 20px 0;
-    }
-
-    .req-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-    }
-
-    .req-item.warning {
-      border-color: rgba(184, 92, 56, 0.3);
-      background: rgba(184, 92, 56, 0.04);
-    }
-
-    .req-label {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--text-dim);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-
-    .req-value {
-      font-size: 0.85rem;
-      color: var(--text);
-      line-height: 1.4;
-    }
-
-    .req-value.dim {
-      color: var(--text-muted);
-    }
-
-    /* Models table */
-    .models-table-wrap {
-      overflow-x: auto;
-      margin: 20px 0;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-    }
-
-    .models-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-      min-width: 480px;
-    }
-
-    .models-table thead {
-      background: var(--surface2);
-    }
-
-    .models-table th {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text);
-      padding: 14px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .models-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text-muted);
-    }
-
-    .models-table tbody tr:last-child td {
-      border-bottom: none;
-    }
-
-    .models-table tbody tr:hover {
-      background: var(--surface);
-    }
-
-    .models-table .model-name {
-      font-weight: 500;
-      color: var(--text);
-    }
-
-    .tag {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.04em;
-      padding: 2px 8px;
-      border-radius: 100px;
-      background: var(--pill-bg);
-      color: var(--pill-text);
-      border: 1px solid var(--pill-border);
-    }
-
-    .tag.free {
-      background: var(--pill-bg);
-      color: var(--pill-text);
-    }
-
-    /* Footer */
-    .page-footer {
-      padding: 24px;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--text-dim);
-      letter-spacing: 0.04em;
-    }
-
-    /* Responsive */
-    @media (max-width: 680px) {
-      .docs-header h1 {
-        font-size: 1.8rem;
-      }
-
-      .req-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .steps {
-        flex-direction: column;
-      }
-
-      .page-header {
-        padding: 16px;
-      }
-
-      .page-header-right {
-        gap: 8px;
-      }
-    }
+    /* For smooth scrolling with sticky header */
+    .doc-section { scroll-margin-top: 80px; }
   </style>
 </head>
-
 <body>
-
   <div class="page-wrap">
     <header class="page-header">
       <a class="page-header-logo" href="/">
@@ -461,17 +57,42 @@
         <a class="btn-top-solid" href="https://app.thinkhere.ai/?mode=signup">Create Account</a>
       </div>
     </header>
+    <div class="legal-layout">
+      
+<div class="doc-nav">
+  <div class="nav-doc-title">Guide &amp; Help</div>
+  <ul>
+    <li><a href="#quick-start">Quick Start</a></li>
+    <li><a href="#quick-tiers">Feature Tiers</a></li>
+    <li><a href="#quick-devices">Device Requirements</a></li>
+    <li><a href="#quick-models">Chat Models</a></li>
+  </ul>
+  <div class="nav-divider"></div>
+  <div class="nav-other-label">Help Articles</div>
+  <ul>
+    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#how-thinkhere-works">How ThinkHere Works</a></li>
+    <li><a href="#privacy-security">Privacy &amp; Security</a></li>
+    <li><a href="#accounts-tiers">Accounts &amp; Tiers</a></li>
+    <li><a href="#models-performance">Models &amp; Performance</a></li>
+    <li><a href="#files-knowledge-base">Files &amp; Knowledge Base</a></li>
+    <li><a href="#device-browser-support">Device &amp; Browser Support</a></li>
+    <li><a href="#troubleshooting">Troubleshooting</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+</div>
 
-    <div class="page-content">
+      <div class="doc-main">
+        
+<div class="legal-cover" id="top">
+  <div class="cover-label">ThinkHere &middot; Guide</div>
+  <h1 class="cover-title">Guide &amp; <em>Help Centre</em></h1>
+  <div class="cover-meta">
+    <span>Getting started, features, and comprehensive help documentation</span>
+  </div>
+</div>
 
-      <!-- Docs Header -->
-      <div class="docs-header">
-        <h1>Documentation</h1>
-        <p>Everything you need to get started with ThinkHere.</p>
-      </div>
-
-      <!-- Getting Started -->
-      <section class="docs-section">
+        <section class="doc-section" id="quick-start">
         <h2>Getting Started</h2>
         <p>ThinkHere runs entirely in your browser. There is nothing to install and no account is required to start
           chatting.</p>
@@ -514,8 +135,7 @@
           loads from your browser's cache in seconds.</p>
       </section>
 
-      <!-- Tier Comparison -->
-      <section class="docs-section">
+<section class="doc-section" id="quick-tiers">
         <h2>Feature Tiers</h2>
         <p>ThinkHere offers three tiers. All tiers run the model locally in your browser &mdash; your conversations
           never leave your device.</p>
@@ -601,41 +221,7 @@
         </div>
       </section>
 
-      <!-- Device Requirements -->
-      <section class="docs-section">
-        <h2>Device Requirements</h2>
-        <p>ThinkHere runs AI inference on your local hardware, so device capability matters.</p>
-
-        <div class="req-grid">
-          <div class="req-item">
-            <div class="req-label">Browser</div>
-            <div class="req-value">Chrome 113+, Edge 113+, Safari 18+</div>
-          </div>
-          <div class="req-item">
-            <div class="req-label">API</div>
-            <div class="req-value">WebGPU required</div>
-          </div>
-          <div class="req-item">
-            <div class="req-label">Memory</div>
-            <div class="req-value">Minimum 4 GB RAM for SmolLM2 1.7B</div>
-          </div>
-          <div class="req-item">
-            <div class="req-label">Best Experience</div>
-            <div class="req-value">Desktop or laptop with dedicated or integrated GPU</div>
-          </div>
-          <div class="req-item warning">
-            <div class="req-label">iPhone</div>
-            <div class="req-value dim">Not supported &mdash; iOS memory limits prevent model loading</div>
-          </div>
-          <div class="req-item">
-            <div class="req-label">iPad</div>
-            <div class="req-value dim">M-series iPads may work, though experience varies</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Models -->
-      <section class="docs-section">
+<section class="doc-section" id="quick-devices">
         <h2>Chat Models</h2>
         <p>The free tier on thinkhere.ai includes SmolLM2 1.7B. All 8 models are available with a free account at <a
             href="https://app.thinkhere.ai" style="color: var(--accent); text-decoration: none;">app.thinkhere.ai</a>.
@@ -761,39 +347,818 @@
         </div>
       </section>
 
-    </div>
+<section class="doc-section" id="quick-models">
+        <h2>Device Requirements</h2>
+        <p>ThinkHere runs AI inference on your local hardware, so device capability matters.</p>
 
+        <div class="req-grid">
+          <div class="req-item">
+            <div class="req-label">Browser</div>
+            <div class="req-value">Chrome 113+, Edge 113+, Safari 18+</div>
+          </div>
+          <div class="req-item">
+            <div class="req-label">API</div>
+            <div class="req-value">WebGPU required</div>
+          </div>
+          <div class="req-item">
+            <div class="req-label">Memory</div>
+            <div class="req-value">Minimum 4 GB RAM for SmolLM2 1.7B</div>
+          </div>
+          <div class="req-item">
+            <div class="req-label">Best Experience</div>
+            <div class="req-value">Desktop or laptop with dedicated or integrated GPU</div>
+          </div>
+          <div class="req-item warning">
+            <div class="req-label">iPhone</div>
+            <div class="req-value dim">Not supported &mdash; iOS memory limits prevent model loading</div>
+          </div>
+          <div class="req-item">
+            <div class="req-label">iPad</div>
+            <div class="req-value dim">M-series iPads may work, though experience varies</div>
+          </div>
+        </div>
+      </section>
+        <section class="doc-section" id="getting-started">
+      <div class="section-cat">Category 1</div>
+      <h2 class="section-title">Getting Started</h2>
+
+      <article class="article" id="what-is-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">1. What is ThinkHere?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">ThinkHere is a private AI chat app that runs entirely in your browser on your own hardware.
+          Instead of sending your prompts to a remote AI server, ThinkHere downloads a language model to your device and
+          runs it locally — using your GPU via WebGPU.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The result is an AI assistant where your prompts and responses never leave your browser tab.
+          There is no cloud inference, no server storing your conversations, and no third party processing what you
+          write.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">ThinkHere is built by Qanata Lab and is open source under the MIT licence.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="how-to-start-using-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">2. How to start using ThinkHere</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">To begin, open ThinkHere in a supported browser on a compatible device. No installation is
+          required — ThinkHere runs entirely in the browser tab.</p>
+        <ul class="doc-list" style="list-style:decimal; padding-left:16px;">
+          <li>Open <a href="https://thinkhere.ai">thinkhere.ai</a> in Chrome 113+, Edge 113+, or Safari 18+.</li>
+          <li>ThinkHere will check that your browser supports WebGPU. If it does, you will be taken straight to the chat
+            interface.</li>
+          <li>Without an account, SmolLM2 1.7B loads automatically. The first load includes a model download of ~1 GB,
+            so allow a few minutes depending on your connection.</li>
+          <li>Once the model is ready, type your first message and start chatting. All processing happens on your
+            device.</li>
+        </ol>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">If you want access to more models and features, <a
+            href="#create-a-free-account-in-thinkhere">create a free account</a>.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="use-thinkhere-without-an-account">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">3. Use ThinkHere without an account</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">No account is required to use ThinkHere. Visit the site in a supported browser and you can start
+          chatting immediately with SmolLM2 1.7B — a fast, lightweight chat model optimized for on-device use.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The no-account experience gives you a clean, fast path into local AI with no sign-up friction.
+          It is ideal for trying ThinkHere for the first time or for one-off conversations you do not need to save.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Without an account you do not get conversation history, export, the full model library, system
+          prompts, or knowledge base features. <a href="#what-you-get-with-a-free-account">See what a free account
+            unlocks.</a></p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="create-a-free-account-in-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">4. Create a free account in ThinkHere</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Creating a free account unlocks the full ThinkHere experience at no cost. To sign up, click
+          <strong>Create Account</strong> on the ThinkHere homepage and provide your name and email address.
+        </p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Signing in does not change the core architecture. ThinkHere still runs the AI model locally in
+          your browser on your own hardware — your conversations are never sent to Qanata Lab's servers regardless of
+          whether you are signed in.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Your account stores your preferences, settings, and feature access only. <a
+            href="#what-you-get-with-a-free-account">See everything a free account includes.</a></p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="your-first-model-in-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">5. Your first model in ThinkHere</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The first time you load a model in ThinkHere, the browser downloads the model weights (typically
+          1–3 GB depending on the model), stores them in your browser's Cache Storage, and compiles them for your
+          specific GPU using WebGPU shader compilation. This only happens once per model.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">On subsequent visits, the model loads from the local cache in seconds. You do not need to
+          download it again unless you clear your browser's cached data.</p>
+        <div class="notice-banner" style="margin:20px 0; max-width: 800px;">
+          
+          <p>If the first load seems to stall, check your network connection and make sure you have at least 6 GB of
+            free RAM. Closing other browser tabs frees up memory and can help.</p>
+        </div>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+    </section>
+
+<section class="doc-section" id="how-thinkhere-works">
+      <div class="section-cat">Category 2</div>
+      <h2 class="section-title">How ThinkHere Works</h2>
+
+      <article class="article" id="how-thinkhere-runs-ai-in-the-browser">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">6. How ThinkHere runs AI in the browser</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">ThinkHere uses two key pieces of browser technology to run AI locally: WebGPU for
+          GPU-accelerated compute, and the WebLLM framework to manage the model pipeline.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">When you send a message, ThinkHere processes it entirely within the browser tab. The model
+          receives your prompt, generates a response token by token, and streams it back to the interface — all without
+          any network request leaving your device. The full pipeline looks like this:</p>
+        <ul class="doc-list">
+          <li>Model weights are downloaded once and cached in the browser's Cache Storage</li>
+          <li>On load, WebLLM compiles the model for your GPU using WebGPU shader compilation</li>
+          <li>Your prompt is tokenised and passed to the model running on your GPU</li>
+          <li>The model generates a response locally and streams it to the chat interface</li>
+          <li>Nothing in this process involves a server — it is entirely on-device</li>
+        </ul>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="what-webgpu-does-in-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">7. What WebGPU does in ThinkHere</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">WebGPU is a modern browser API that provides low-level access to your device's GPU. Unlike
+          WebGL, which was designed for graphics rendering, WebGPU is built for general-purpose compute — including the
+          matrix multiplications that power AI inference.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">ThinkHere uses WebGPU to run language model inference directly on your hardware. Without WebGPU,
+          the browser cannot access the GPU efficiently enough to run models at a usable speed.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">WebGPU is supported in Chrome 113+, Edge 113+, and Safari 18+. It is not available on older
+          browser versions or on iPhones due to iOS memory constraints.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="what-webllm-does-in-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">8. What WebLLM does in ThinkHere</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">WebLLM is an open-source framework for running large language models in web browsers. ThinkHere
+          uses WebLLM to handle model loading, tokenisation, context management, and inference scheduling — all inside
+          the browser.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">For most users, WebLLM is invisible. It is the layer that makes the browser capable of running a
+          full language model pipeline without relying on a server. If you are curious about the technical detail, the
+          WebLLM documentation is publicly available.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="why-models-are-downloaded-and-cached-locally">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">9. Why models are downloaded and cached locally</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Because ThinkHere runs the AI model on your device, your browser needs access to the model
+          weights — the large files that define how the model thinks and responds. These are downloaded from Qanata
+          Lab's servers on first use and stored in your browser's Cache Storage.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The download is the only part of ThinkHere that requires an internet connection for inference.
+          Once cached, the model loads locally in seconds on future visits, and every conversation happens entirely
+          on-device with no network activity.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Model files are typically 1–3 GB. You can clear cached models at any time through your browser's
+          storage settings.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="what-happens-when-you-close-the-tab">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">10. What happens when you close the tab</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">When you close the ThinkHere tab, the active AI session ends and the model is unloaded from
+          memory. The model weights remain cached in your browser's Cache Storage, so the next time you open ThinkHere
+          the model loads quickly without a re-download.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">If you are signed in, your conversation history is saved in your browser's local storage and
+          will be available when you return. If you are using ThinkHere without an account, or in a private/incognito
+          window, the conversation is not retained after the tab closes.</p>
+        <div class="notice-banner" style="margin:20px 0; max-width: 800px;">
+          
+          <p>Qanata Lab has no access to your conversation history. It exists only in your browser's local storage, on
+            your device.</p>
+        </div>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+    </section>
+
+<section class="doc-section" id="privacy-security">
+      <div class="section-cat">Category 3</div>
+      <h2 class="section-title">Privacy and Security</h2>
+
+      <article class="article" id="how-thinkhere-protects-your-privacy">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">11. How ThinkHere protects your privacy</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">ThinkHere's privacy model is architectural, not just policy-based. The AI model runs on your
+          device using WebGPU. Your prompts and responses are processed locally and stored only in your browser's local
+          storage. No network request carries your conversation to any server at any point during inference.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The only outbound requests ThinkHere makes are: downloading model weights on first use (standard
+          HTTPS), and account authentication if you are signed in. Neither involves your conversation content.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">You can verify this yourself — ThinkHere is open source under the MIT licence and the full
+          codebase is publicly available.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="does-thinkhere-send-my-prompts-to-the-cloud">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">12. Does ThinkHere send my prompts to the cloud?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">No. ThinkHere does not send your prompts to the cloud. Every response is generated on your own
+          device. There is no cloud inference provider in the pipeline — not for any tier, not for any model available
+          in ThinkHere.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The only data that leaves your device is: model weight downloads on first use, and standard
+          account authentication requests if you are signed in. Your conversation content is never part of either.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="who-can-read-my-conversations">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">13. Who can read my conversations?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Nobody at Qanata Lab can read your conversations. Because inference runs locally and
+          conversations are stored only in your browser's local storage, they never reach our servers.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The only people who can access your ThinkHere conversations are those with physical or
+          account-level access to your device and browser. Treat your conversation history the same way you would treat
+          any other sensitive data stored locally on your machine.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="where-conversations-are-stored">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">14. Where conversations are stored</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Conversations are stored in your browser's local storage, on your device. They are not synced to
+          Qanata Lab's servers and are not associated with your account even if you are signed in.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">This means:</p>
+        <ul class="doc-list">
+          <li>Clearing your browser's local storage will delete your conversation history</li>
+          <li>Using ThinkHere in a private or incognito window means conversations are not retained after the session
+          </li>
+          <li>Switching devices or browsers will not carry your history across — it stays on the original device</li>
+        </ul>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="is-thinkhere-suitable-for-sensitive-information">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">15. Is ThinkHere suitable for sensitive information?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">ThinkHere's local-first design makes it well-suited for privacy-sensitive work. Because your
+          prompts never leave your device, ThinkHere avoids the exposure risk that comes with cloud AI tools — where
+          conversations may be logged, retained, or used for model training.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">For professionally sensitive workflows — legal, medical, financial, or confidential business
+          content — ThinkHere offers a meaningful privacy advantage over cloud-based alternatives. That said, you should
+          still apply your organisation's own security standards for device access, browser data, and local storage.</p>
+        <div class="notice-banner" style="margin:20px 0; max-width: 800px;">
+          
+          <p>ThinkHere does not replace formal compliance or data governance processes. If your organisation has
+            specific requirements around AI tool usage, review those alongside ThinkHere's open-source codebase and
+            Privacy Policy before deploying.</p>
+        </div>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+    </section>
+
+<section class="doc-section" id="accounts-tiers">
+      <div class="section-cat">Category 4</div>
+      <h2 class="section-title">Accounts and Tiers</h2>
+
+      <article class="article" id="thinkhere-pricing-and-tiers-explained">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">16. ThinkHere pricing and tiers explained</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">ThinkHere has three tiers. Two are available now; one is coming soon.</p>
+        <table class="feature-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Free — No account</th>
+              <th>Free — Signed in</th>
+              <th>Paid (coming soon)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SmolLM2 1.7B model</td>
+              <td><span class="tag tag-yes">Yes</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Full model library (9+ models)</td>
+              <td><span class="tag tag-no">No</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>System prompts</td>
+              <td><span class="tag tag-no">No</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Temperature &amp; generation controls</td>
+              <td><span class="tag tag-no">No</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Conversation history &amp; export</td>
+              <td><span class="tag tag-no">No</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>File upload as context</td>
+              <td><span class="tag tag-no">No</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Knowledge base with RAG</td>
+              <td><span class="tag tag-no">No</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Priority support &amp; premium features</td>
+              <td><span class="tag tag-no">No</span></td>
+              <td><span class="tag tag-no">No</span></td>
+              <td><span class="tag tag-soon">Coming soon</span></td>
+            </tr>
+            <tr>
+              <td>Local inference (all tiers)</td>
+              <td><span class="tag tag-yes">Always</span></td>
+              <td><span class="tag tag-yes">Always</span></td>
+              <td><span class="tag tag-yes">Always</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="what-you-get-with-no-account">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">17. What you get with no account</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Without an account you get immediate access to ThinkHere with no sign-up required. You can start
+          chatting with SmolLM2 1.7B — a fast, lightweight chat model — as soon as the model has downloaded and cached
+          on your device.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The no-account experience is the fastest way to try local AI. It is intentionally simple: one
+          model, no history, no advanced controls. Everything still runs locally on your device.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="what-you-get-with-a-free-account">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">18. What you get with a free account</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">A free account is and will always remain free. Creating one unlocks the full ThinkHere feature
+          set:</p>
+        <ul class="doc-list">
+          <li>The full model library — currently nine models and growing</li>
+          <li>System prompts to customise how the model responds</li>
+          <li>Temperature and generation parameter controls</li>
+          <li>Conversation history saved in your browser's local storage</li>
+          <li>Export of conversations</li>
+          <li>File upload as context for your conversations</li>
+          <li>Knowledge base with retrieval-augmented generation (RAG)</li>
+        </ul>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Signing in does not move inference to the cloud. All AI processing continues to run on your
+          device regardless of account status.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="what-is-coming-in-the-paid-tier">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">19. What is coming in the paid tier</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">A paid tier is in development. It will include priority support and additional premium features.
+          We will announce full details before launch.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">One thing will not change: the paid tier will continue to run AI inference locally in your
+          browser. Local processing is not a free-tier limitation — it is how ThinkHere works at every level.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="does-signing-in-change-where-inference-happens">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">20. Does signing in change where inference happens?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">No. Signing in unlocks features but does not change the architecture. ThinkHere always runs the
+          AI model locally in your browser, on your hardware — whether you have an account or not, whether you are on
+          the free or paid tier.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Your account only manages your preferences, settings, and feature access. It has no role in the
+          inference pipeline.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+    </section>
+
+<section class="doc-section" id="models-performance">
+      <div class="section-cat">Category 5</div>
+      <h2 class="section-title">Models and Performance</h2>
+
+      <article class="article" id="which-models-are-available-in-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">21. Which models are available in ThinkHere?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Without an account, ThinkHere gives you access to <strong>SmolLM2 1.7B</strong> — a fast,
+          lightweight chat model optimized for on-device inference. It is a good starting point for most tasks and works
+          well on a wide range of hardware.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">With a free signed-in account, the full model library is available — currently nine models and
+          growing. Models vary in size, capability, and hardware requirements. Larger models produce higher quality
+          output but require more RAM and take longer to load. Smaller models are faster and work on lighter hardware.
+        </p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The in-app model selector shows available models alongside their approximate size and
+          recommended RAM. Check the <a href="https://thinkhere.ai/docs.html">ThinkHere Docs</a> for the current full
+          model list.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="why-the-first-model-load-takes-time">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">22. Why the first model load takes time</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The first load involves three steps that do not repeat on subsequent visits:</p>
+        <ul class="doc-list" style="list-style:decimal; padding-left:16px;">
+          <li><strong>Download</strong> — model weights (1–3 GB depending on the model) are downloaded from Qanata Lab's
+            servers over HTTPS.</li>
+          <li><strong>Cache</strong> — the weights are stored in your browser's Cache Storage so they are available
+            locally in future.</li>
+          <li><strong>Compile</strong> — WebLLM compiles the model for your specific GPU using WebGPU shader
+            compilation. This step can take 30–60 seconds on first run.</li>
+        </ol>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">After this one-time setup, the model loads from the local cache in seconds on every subsequent
+          visit.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="how-much-ram-do-i-need">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">23. How much RAM do I need?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">You need at least <strong>4 GB of RAM</strong> to run the smallest model (SmolLM2 1.7B). Larger
+          models require more — the in-app model selector shows recommended RAM for each option.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">RAM available to ThinkHere is shared with your operating system, browser, and other open
+          applications. If you are close to the minimum, closing other tabs and applications before loading a model can
+          make a meaningful difference.</p>
+        <ul class="doc-list">
+          <li>4 GB RAM — minimum for SmolLM2 1.7B</li>
+          <li>8–12 GB RAM — comfortable for mid-size models</li>
+          <li>16 GB+ RAM — recommended for larger, higher-quality models</li>
+        </ul>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="how-fast-is-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">24. How fast is ThinkHere?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">On a modern laptop or desktop with a dedicated or integrated GPU, ThinkHere typically generates
+          <strong>10–30+ tokens per second</strong> — fast enough for natural back-and-forth conversation. Heavier
+          devices at the higher end of that range feel noticeably responsive.
+        </p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Speed depends on three factors: the model you have selected (smaller models are faster), your
+          device's GPU capability, and how much RAM is available. On older or lower-powered hardware, generation may be
+          slower but still functional with a lighter model.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="how-to-choose-the-best-model-for-your-device">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">25. How to choose the best model for your device</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Start with the smallest model your use case allows. SmolLM2 1.7B is a solid default — it runs on
+          4 GB of RAM and handles most everyday tasks well. Move up to a larger model only if you need higher quality
+          output and your hardware is comfortable at the current level.</p>
+        <ul class="doc-list">
+          <li>If responses feel slow, switch to a lighter model</li>
+          <li>If the model fails to load, you may not have enough free RAM — close other applications and try again, or
+            select a smaller model</li>
+          <li>If quality is the priority and your device has 16 GB+ RAM, try one of the larger models in the library
+          </li>
+        </ul>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The model selector in the app shows the recommended minimum RAM for each model to help you
+          decide.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+    </section>
+
+<section class="doc-section" id="files-knowledge-base">
+      <div class="section-cat">Category 6</div>
+      <h2 class="section-title">Files and Knowledge Base</h2>
+
+      <article class="article" id="how-file-upload-works-in-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">26. How file upload works in ThinkHere</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">File upload lets you add a local document or file as context for your conversation. Once
+          uploaded, the content of the file is available to the model as part of the conversation — you can ask
+          questions about it, summarise it, or use it as reference material.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Uploaded files are processed locally in your browser. They are not sent to Qanata Lab's servers.
+          File upload is available to signed-in users on the free account tier and above.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Check the ThinkHere app for the current list of supported file types and any size limits, as
+          these may be updated as the product develops.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="what-is-the-thinkhere-knowledge-base">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">27. What is the ThinkHere knowledge base?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The ThinkHere knowledge base lets you store reference documents and use them as persistent
+          context across conversations. Instead of uploading a file each time, you can add documents to your knowledge
+          base once and have the model draw on them whenever relevant.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The knowledge base uses retrieval-augmented generation (RAG) to find and inject the most
+          relevant sections of your stored documents into the model's context when you ask a question. This means the
+          model can answer questions grounded in your own material rather than just its training data.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The knowledge base is available to signed-in users on the free account tier and above.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="what-rag-means-in-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">28. What RAG means in ThinkHere</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">RAG stands for retrieval-augmented generation. It is the technique ThinkHere uses to let the
+          model answer questions using documents from your knowledge base.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">In practice it works like this: when you ask a question, ThinkHere searches your stored
+          documents for the most relevant passages and includes them in the model's context alongside your question. The
+          model then generates a response that draws on both its training and your specific material.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The benefit is that the model can give you accurate, grounded answers about your own documents —
+          without you needing to paste the content into every message manually.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="who-can-use-file-upload-and-knowledge-base-features">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">29. Who can use file upload and knowledge base features?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Both file upload and the knowledge base require a free signed-in account. They are not available
+          in the no-account experience.</p>
+        <table class="feature-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>No account</th>
+              <th>Free account</th>
+              <th>Paid tier</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>File upload as context</td>
+              <td><span class="tag tag-no">No</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Knowledge base</td>
+              <td><span class="tag tag-no">No</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+              <td><span class="tag tag-yes">Yes</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;"><a href="#create-a-free-account-in-thinkhere">Create a free account</a> to access these
+          features.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="how-local-first-ai-affects-document-workflows">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">30. How local-first AI affects document workflows</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">With cloud AI tools, uploading a document means sending it to a third-party server. That content
+          may be logged, retained, or used downstream in ways that are difficult to verify.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">With ThinkHere, files you upload or add to your knowledge base stay on your device. The model
+          reads and processes them locally. Nothing in your documents is transmitted to Qanata Lab. This makes ThinkHere
+          particularly useful when working with confidential documents, internal business material, or personal content
+          you would prefer not to share with a cloud service.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+    </section>
+
+<section class="doc-section" id="device-browser-support">
+      <div class="section-cat">Category 7</div>
+      <h2 class="section-title">Device and Browser Support</h2>
+
+      <article class="article" id="supported-browsers-for-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">31. Supported browsers for ThinkHere</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">ThinkHere requires a browser with WebGPU support. The following browsers are officially
+          supported:</p>
+        <table class="feature-table">
+          <thead>
+            <tr>
+              <th>Browser</th>
+              <th>Minimum version</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Google Chrome</td>
+              <td>113+</td>
+              <td>Recommended — best WebGPU support</td>
+            </tr>
+            <tr>
+              <td>Microsoft Edge</td>
+              <td>113+</td>
+              <td>Chromium-based; performs similarly to Chrome</td>
+            </tr>
+            <tr>
+              <td>Apple Safari</td>
+              <td>18+</td>
+              <td>Supported on macOS and iPadOS (M-series)</td>
+            </tr>
+            <tr>
+              <td>Mozilla Firefox</td>
+              <td>—</td>
+              <td>Not currently supported; WebGPU is not stable in Firefox</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">If your browser is not listed or is below the minimum version, ThinkHere will display an error
+          on load. Updating your browser to the latest version is the simplest fix.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="what-devices-work-best-with-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">32. What devices work best with ThinkHere</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">ThinkHere runs best on desktop and laptop computers with at least 6 GB of RAM and a modern GPU.
+          Devices with a discrete GPU (such as an NVIDIA or AMD card) or a capable integrated GPU (such as those in
+          Apple Silicon Macs) generally provide the fastest experience.</p>
+        <ul class="doc-list">
+          <li><strong>Best:</strong> Mac with Apple Silicon (M1 or later), Windows desktop or laptop with a discrete GPU
+          </li>
+          <li><strong>Good:</strong> Most modern laptops with 8 GB+ RAM and a recent integrated GPU</li>
+          <li><strong>Limited:</strong> Older laptops with 6 GB RAM — use the smallest model only</li>
+          <li><strong>Not supported:</strong> iPhone (iOS memory constraints prevent model loading)</li>
+        </ul>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="does-thinkhere-work-on-iphone">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">33. Does ThinkHere work on iPhone?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">No. ThinkHere does not currently work on iPhone. iOS imposes memory limits that prevent the
+          browser from loading model weights of the size required to run a language model. This is a hardware and OS
+          constraint, not a browser version issue.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">We are monitoring improvements in browser capabilities and model efficiency. If iPhone support
+          becomes practical in the future, we will announce it. For now, iPhone users should use ThinkHere on a desktop
+          or laptop.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="does-thinkhere-work-on-ipad">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">34. Does ThinkHere work on iPad?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">ThinkHere may work on iPads with an M-series chip (M1 or later), using Safari 18+. M-series
+          iPads have more RAM and better GPU access than older iPads, which makes model loading more feasible.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">However, performance can vary. Expect longer load times and slower generation than on a Mac or
+          PC. Older iPads without an M-series chip are unlikely to load models successfully due to memory constraints,
+          similar to iPhone.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">If ThinkHere fails to load on your iPad, check that you are using Safari 18+ and that the device
+          has an M-series chip. If it still does not work, use a desktop or laptop instead.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="how-to-check-whether-webgpu-is-enabled">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">35. How to check whether WebGPU is enabled</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">ThinkHere checks for WebGPU support automatically when you open the app and will display an
+          error if it is unavailable. If you want to check manually:</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;"><strong>In Chrome or Edge:</strong></p>
+        <ul class="doc-list" style="list-style:decimal; padding-left:16px;">
+          <li>Type <code
+              style="font-family:var(--mono);font-size:13px;background:var(--paper-mid);padding:2px 6px;">chrome://gpu</code>
+            in the address bar and press Enter.</li>
+          <li>Look for <strong>WebGPU</strong> in the Graphics Feature Status list. It should show <em>Hardware
+              accelerated</em>.</li>
+          <li>If it shows <em>Disabled</em> or <em>Software only</em>, your hardware or driver may not support WebGPU —
+            update your graphics drivers and try again.</li>
+        </ol>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;"><strong>In Safari:</strong></p>
+        <ul class="doc-list" style="list-style:decimal; padding-left:16px;">
+          <li>Open Safari Preferences → Advanced → enable <strong>Show features for web developers</strong>.</li>
+          <li>Go to Develop → Experimental Features and confirm WebGPU is enabled.</li>
+        </ol>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+    </section>
+
+<section class="doc-section" id="troubleshooting">
+      <div class="section-cat">Category 8</div>
+      <h2 class="section-title">Troubleshooting</h2>
+
+      <article class="article" id="thinkhere-is-stuck-loading-a-model">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">36. ThinkHere is stuck loading a model</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">If the loading progress bar has stopped moving or the model has not finished loading after
+          several minutes, try the following steps in order:</p>
+        <ul class="doc-list" style="list-style:decimal; padding-left:16px;">
+          <li>Check your internet connection. The first load requires a 1–3 GB download. A slow or interrupted
+            connection is the most common cause of a stalled first load.</li>
+          <li>Refresh the page. ThinkHere will resume from the cached portion of the download if part of it completed.
+          </li>
+          <li>Close other browser tabs and applications to free up RAM. If available memory drops too low, the model may
+            fail to load.</li>
+          <li>Check that your browser supports WebGPU. See <a href="#how-to-check-whether-webgpu-is-enabled">How to
+              check whether WebGPU is enabled</a>.</li>
+          <li>If the issue persists, try a different supported browser (Chrome 113+ is recommended) or select a smaller
+            model from the model picker.</li>
+        </ol>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="thinkhere-feels-slow">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">37. ThinkHere feels slow</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Slow generation speed is usually caused by one or more of these factors:</p>
+        <ul class="doc-list">
+          <li><strong>Model size</strong> — larger models generate more slowly. Switch to a smaller model if speed is a
+            priority.</li>
+          <li><strong>Available RAM</strong> — if your device is low on memory, generation slows. Close other
+            applications and browser tabs.</li>
+          <li><strong>Background workloads</strong> — other GPU-intensive tasks (video playback, games, video calls)
+            compete with ThinkHere for GPU resources.</li>
+          <li><strong>Browser</strong> — Chrome and Edge currently have the most mature WebGPU implementations. Try
+            switching if you are on Safari and performance is poor.</li>
+        </ul>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">On modern hardware with the recommended RAM, expect 10–30+ tokens per second with appropriately
+          sized models.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="my-browser-says-webgpu-is-unavailable">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">38. My browser says WebGPU is unavailable</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">If ThinkHere reports that WebGPU is unavailable, work through these checks:</p>
+        <ul class="doc-list" style="list-style:decimal; padding-left:16px;">
+          <li>Confirm you are using a supported browser: Chrome 113+, Edge 113+, or Safari 18+. Firefox does not support
+            WebGPU.</li>
+          <li>Update your browser to the latest version. WebGPU support has improved significantly in recent releases.
+          </li>
+          <li>Update your graphics drivers. Outdated drivers can block WebGPU even on supported browsers.</li>
+          <li>Check that hardware acceleration is enabled in your browser settings. In Chrome, go to Settings → System
+            and make sure <em>Use hardware acceleration when available</em> is turned on.</li>
+          <li>If you are on a corporate device, IT policy may have disabled WebGPU. Contact your IT team.</li>
+        </ol>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">If WebGPU remains unavailable after these steps, your hardware may not support it. ThinkHere
+          requires a GPU that is compatible with the WebGPU standard.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="i-do-not-have-enough-memory-to-load-a-model">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">39. I do not have enough memory to load a model</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">If ThinkHere fails with a memory error, or the tab crashes during model loading, your device
+          does not have enough free RAM for the selected model.</p>
+        <ul class="doc-list" style="list-style:decimal; padding-left:16px;">
+          <li>Close other browser tabs — each tab uses memory that ThinkHere needs.</li>
+          <li>Close other applications running in the background.</li>
+          <li>Select a smaller model. The minimum is 4 GB of RAM for SmolLM2 1.7B. Larger models require more.</li>
+          <li>Restart your browser with only ThinkHere open before attempting to load the model again.</li>
+        </ol>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">If you consistently cannot load even the smallest model after following these steps, your device
+          may not meet the minimum requirements. ThinkHere requires at least 6 GB of available RAM.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="the-app-works-on-one-browser-but-not-another">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">40. The app works on one browser but not another</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">WebGPU support varies between browsers. Chrome and Edge currently have the most stable and
+          performant WebGPU implementations. Safari's support is improving but may behave differently on some hardware
+          combinations. Firefox does not support WebGPU.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">If ThinkHere works in Chrome but not in another browser, this is expected. Use Chrome 113+ or
+          Edge 113+ for the most consistent experience. If Safari 18+ is your only option, make sure Experimental WebGPU
+          is enabled (see <a href="#how-to-check-whether-webgpu-is-enabled">How to check whether WebGPU is enabled</a>).
+        </p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+    </section>
+
+<section class="doc-section" id="faq">
+      <div class="section-cat">Category 9</div>
+      <h2 class="section-title">FAQ</h2>
+
+      <article class="article" id="is-thinkhere-really-private">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">41. Is ThinkHere really private?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Yes. ThinkHere's privacy is architectural. The AI model runs on your device using WebGPU, and
+          your prompts and responses are stored only in your browser's local storage. No network request carries your
+          conversation to any server during inference — not for any tier, not for any model.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">You can verify this yourself. ThinkHere is open source under the MIT licence. The codebase is
+          publicly available for inspection. You can also watch your browser's network activity while using ThinkHere —
+          you will see no outbound requests during a conversation.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="do-i-need-an-account-to-use-thinkhere">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">42. Do I need an account to use ThinkHere?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">No. You can start using ThinkHere immediately without creating an account. Visit the site in a
+          supported browser and SmolLM2 1.7B loads automatically after a one-time model download.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">A free account unlocks more models, conversation history, system prompts, file upload, and the
+          knowledge base. See <a href="#thinkhere-pricing-and-tiers-explained">ThinkHere pricing and tiers explained</a>
+          for the full comparison.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="does-thinkhere-use-cloud-inference">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">43. Does ThinkHere use cloud inference?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">No. ThinkHere does not use cloud inference at any tier. Every response is generated locally on
+          your device using WebGPU. There is no remote AI server processing your prompts — not even in the background.
+        </p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The only connection ThinkHere makes to external servers is downloading model weights on first
+          use, and account authentication if you are signed in. Neither involves your conversation content.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="why-do-models-need-to-be-downloaded">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">44. Why do models need to be downloaded?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">Because ThinkHere runs the AI model on your device rather than on a server, your browser needs
+          the model files available locally. Model weights — the data that defines how the model responds — are
+          typically 1–3 GB and cannot be generated or approximated on the fly.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">The download happens once per model. After that, ThinkHere loads the model from your browser's
+          local cache in seconds. You only need an internet connection for the initial download, not for ongoing use.
+        </p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+
+      <article class="article" id="can-i-use-thinkhere-on-mobile">
+        <h3 style="font-family:var(--font-sans); font-size:1.4rem; font-weight:600; color:var(--text); margin:36px 0 16px;">45. Can I use ThinkHere on mobile?</h3>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">iPhone is not currently supported. iOS memory constraints prevent the browser from loading model
+          weights of the size required to run a language model in ThinkHere.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">M-series iPads (M1 or later) may work using Safari 18+, though performance varies and load times
+          are longer than on a desktop or laptop.</p>
+        <p class="body" style="font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:16px;">For the best experience, use ThinkHere on a desktop or laptop with Chrome 113+, Edge 113+, or
+          Safari 18+ and at least 6 GB of free RAM.</p>
+        <div class="back-link"><a href="#top">↑ Back to top</a></div>
+      </article>
+    </section>
+
+
+      </div>
+    </div>
+    
     <div class="footer-trust">
       <span class="trust-pill">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        </svg>
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
         Secure
       </span>
       <span class="trust-dot"></span>
       <span class="trust-pill">
-        <svg viewBox="0 0 24 24">
-          <rect x="3" y="11" width="18" height="11" rx="2" />
-          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-        </svg>
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
         Private
       </span>
       <span class="trust-dot"></span>
       <span class="trust-pill">
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 8v4l3 3" />
-        </svg>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" /></svg>
         Confidential
       </span>
     </div>
-    <p class="legal">
-      By using ThinkHere you agree to our <a href="https://thinkhere.ai/terms.html">Terms of Use</a> and <a
-        href="https://thinkhere.ai/privacy.html">Privacy Policy</a> &middot; A <a href="https://www.qanatalabs.com"
-        target="_blank" rel="noopener">Qanata Labs</a> product
+    <p class="legal" style="padding-bottom:24px;">
+      By using ThinkHere you agree to our <a href="terms.html">Terms of Use</a>, <a href="privacy.html">Privacy Policy</a> and <a href="usage.html">Usage Policies</a> &middot; A <a href="https://www.qanatalabs.com" target="_blank" rel="noopener">Qanata Labs</a> product
     </p>
-  </div>
 
+  </div>
   <script>
     function setTheme(t) {
       document.documentElement.setAttribute('data-theme', t);
@@ -810,5 +1175,4 @@
   </script>
   <script type="module" src="js/auth.js"></script>
 </body>
-
 </html>
